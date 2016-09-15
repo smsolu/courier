@@ -1,0 +1,50 @@
+{% extends '::base.html.twig' %}
+{#{% block aside_left %}
+    {% include "EstudioBundle:Submenu:estudio_submenu.html.twig" with {'active' : active|default('empleados')} %}
+{% endblock %}#}
+{% block aside_breadcrumb %}
+{#    {{ knp_menu_render('CommonBundle:BreadcrumbBuilder:estudioMenu', {'allow_safe_labels': true} ) }}#}
+{% endblock %}
+{% block aside_left %}    
+{#    {% render (controller("CommonBundle:Submenu:estudioCuenta", {'section' : section,'estudio':estudio}))%}#}
+{% endblock %}
+{% block body_top %}    
+{#    {% render (controller("CommonBundle:Submenu:NAVestudioCuenta"))%}#}
+{% endblock %}
+
+{% block body %}
+    <h2>{{estudio.nombre}}</h2>
+    <hr>
+    <div style="padding-top: 20px;padding-bottom: 20px; ">
+    <b>Datos de la Cuenta</b>
+    </div>
+    <div class="form-group">                
+      <label class="control-label required" for="Expediente_caratula">Cuenta</label>
+      <input id="Expediente_caratula" name="Expediente[caratula]" disabled="disabled" class="form-control" value="{{cuenta.nombre}}" type="text">
+    </div>     
+    <div class="form-group">                
+      <label class="control-label required" for="Expediente_caratula">Descripción</label>
+      <input id="Expediente_caratula" name="Expediente[caratula]" disabled="disabled" class="form-control" value="{{cuenta.descripcion}}" type="text">
+    </div>         
+    <hr>
+    {% for valor in valores %}
+        <div class="form-group">  
+            {%if (valor.porc >= 0) and (valor.porc <= 50) %}
+                {% set clase = 'progress-bar progress-bar-success' %}
+                {%elseif (valor.porc > 50) and (valor.porc <= 80) %}
+                    {%set clase ='progress-bar progress-bar-warning'%}
+                {%else%}
+                    {%set clase ='progress-bar progress-bar-danger'%}
+            {%endif%}
+            
+            <label class="control-label required" for="Expediente_caratula">{{valor.nombre}} ({{valor.cantidad}} / {{valor.max}}) - <b>{{valor.porc_label}}%</b></label>
+            <div class="progress">
+                <div class="{{clase}}" role="progressbar" aria-valuenow="{{valor.porc}}%" aria-valuemin="0" aria-valuemax="100" style="width: {{valor.porc}}%">
+                    <span class="sr-only">{{valor.porc_label}}%</span>
+                </div>
+                <div>
+                </div>
+            </div>                
+        </div>
+    {% endfor %}
+{%endblock%}

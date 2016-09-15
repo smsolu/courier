@@ -1,0 +1,61 @@
+<ul class="nav navbar-nav">
+    <li class="dropdown">
+        <a href="#" class="dropdown-toggle" data-toggle="dropdown" style="color:blue">
+            <span class="glyphicon glyphicon-cog" style="color:blue"></span><b> {%trans%}menu_system{%endtrans%}</b><b class="caret"></b>
+        </a>
+        <ul class="dropdown-menu">
+            <li><a href="{{path("system_generateentities_selecttable")}}">{%trans%}menu_system_generarentidades{%endtrans%}</a></li>
+        </ul>
+    </li>
+
+
+    <li><a href="{{path("expediente_list")}}"><span class="glyphicon glyphicon-file"></span>{%trans%}menu_expediente{%endtrans%}</a></li>
+    
+    
+    <li class="dropdown">
+        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+            <span class="glyphicon glyphicon-list"></span> {%trans %}menu_entidad{% endtrans %}<b class="caret"></b>
+        </a>
+        <ul class="dropdown-menu">
+            <li><a href="{{path("entidad_list",{'tipo':'cliente'})}}">{%trans%}menu_entidad_cliente{%endtrans%}</a></li>
+            <li><a href="{{path("entidad_list",{'tipo':'oponente'})}}">{%trans%}menu_entidad_oponente{%endtrans%}</a></li>
+            <li><a href="{{path("entidad_list",{'tipo':'empleado'})}}">{%trans%}menu_entidad_empleado{%endtrans%}</a></li>
+            <li><a href="{{path("entidad_list",{'tipo':'abogado'})}}">{%trans%}menu_entidad_abogado{%endtrans%}</a></li>
+            <li><a href="{{path("tipoentidad_list")}}">{%trans%}menu_entidad_otrascategorias{%endtrans%}</a></li>
+        </ul>
+    </li>
+
+    <li class="dropdown">
+        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+            <span class="glyphicon glyphicon-education"></span> {%trans%}menu_estudio{%endtrans%}<b class="caret"></b>
+        </a>
+        <ul class="dropdown-menu">
+            <li><a href="{{path("estudio_show")}}">{%trans%}menu_estudio_datosestudio{%endtrans%}</a></li>
+            <li><a href="{{path("user_list")}}">{%trans%}menu_estudio_usuario{%endtrans%}</a></li>
+        </ul>
+    </li>
+
+    {# AGENDA #}
+    <li class="dropdown">
+        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+            <span class="glyphicon glyphicon-calendar"></span> {%trans%}menu_agenda{%endtrans%}<b class="caret"></b>
+        </a>
+        <ul class="dropdown-menu">
+            <li><a href="{{path("agenda_list",{'tipo': 0})}}">Eventos de hoy</a></li>
+            <li><a href="{{path("agenda_list",{'tipo': 1})}}">Eventos del mes</a></li>
+            <li><a href="{{path("agenda_list",{'tipo': 2})}}">Todos los eventos</a></li>
+            <li class="divider"></li>
+            <li><a href="{{path("agenda_new",{'tipo':'2'})}}">Nuevo evento</a></li>
+        </ul>
+    </li>    
+    
+    
+    
+</ul>
+<ul class="nav navbar-nav  navbar-right">
+    <li class="dropdown">
+    <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+      <span class="glyphicon glyphicon-user"></span><b class="caret"></b>
+    </a>
+        {% include 'nav/sections/user_session_menu.html.twig' %}
+</ul>

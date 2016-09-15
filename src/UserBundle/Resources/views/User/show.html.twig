@@ -1,0 +1,14 @@
+{% extends 'ABMBundle::show.html.twig' %}
+{% block aside_breadcrumb %}
+    {#{% set breadcrumb = knp_menu_get('CommonBundle:BreadcrumbBuilder:usuarioShowMenu', [],{'user' : user} ) %}
+    {{ knp_menu_render(breadcrumb, {'allow_safe_labels': true, 'parametro' : 'bla'} ) }}#}
+{% endblock %}
+{% block aside_left %}
+    {#{% render (controller("CommonBundle:Submenu:userShow", {'active' : section, 'user' : user}))%}#}
+{% endblock %}
+{% block body_top %}
+    {#{% render (controller("CommonBundle:Submenu:NAVuserShow", {'active' : section, 'user' : user}))%}#}
+{% endblock %}
+{% block form_buttons %}
+    {# En blanco porque no debe editar #}
+{% endblock %}

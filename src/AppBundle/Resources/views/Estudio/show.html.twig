@@ -1,0 +1,14 @@
+{% extends 'ABMBundle::show.html.twig' %}
+{#{% block aside_left %}
+    {% include "EstudioBundle:Submenu:estudio_submenu.html.twig" with {'active' : active|default('empleados')} %}
+{% endblock %}#}
+{% block aside_breadcrumb %}
+{#    {{ knp_menu_render('CommonBundle:BreadcrumbBuilder:estudioMenu', {'allow_safe_labels': true} ) }}#}
+    {{ knp_menu_render('AppBundle:BreadcrumbBuilder:estudioMenu', {'allow_safe_labels': true} ) }}
+{% endblock %}
+{% block aside_left %}    
+{#    {% render (controller("CommonBundle:Submenu:estudioShow", {'section' : section,'estudio':estudio}))%}#}
+{% endblock %}
+{% block body_top %}    
+    {#{% render (controller("CommonBundle:Submenu:NAVestudioShow", {'section' : section,'estudio':estudio}))%}#}
+{% endblock %}

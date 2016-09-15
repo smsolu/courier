@@ -1,0 +1,27 @@
+{#
+    MODOS DE USO:
+    1.  Se puede definir la variable buttons como un array de button, 
+        el cual es otro array con 3 elementos: name (nombre de la seccion, 
+        se usa para mostrar el active), label (es el texto del boton) y 
+        path (es la ruta a la que redirige)
+    2.  Se puede redefinir el bloque buttons y escribir el cuerpo del listado.
+#}
+<div class="row">
+    <div class="col-xs-12">
+        <hr>
+        <ul class="nav nav-pills">
+            {% block buttons %}
+                {% for button in buttons %}
+                    <li class="{% if section|lower|default('general') == button.name %}active{% endif%}">
+                        <a href="{{ button.path }}">
+                            {{button.label|raw}}
+                        </a>
+                    </li>
+                {% endfor %}
+            {% endblock %}    
+        </ul>
+        <hr>
+    </div> 
+</div> 
+
+        

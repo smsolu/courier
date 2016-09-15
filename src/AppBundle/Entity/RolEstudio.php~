@@ -1,0 +1,158 @@
+<?php
+
+namespace LegalPro\Bundles\CommonBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+
+/**
+ * RolEstudio
+ *
+ * @ORM\Table(name="rol_estudio", indexes={@ORM\Index(name="fk_rol_estudio_estudio", columns={"id_estudio"})})
+ * @ORM\Entity
+ */
+class RolEstudio
+{
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="id", type="integer", nullable=false)
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="IDENTITY")
+     */
+    private $id;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="nombre", type="string", length=20, nullable=true)
+     */
+    private $nombre;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="codigo", type="integer", nullable=true)
+     */
+    private $codigo;
+
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="status", type="boolean", nullable=true)
+     */
+    private $status;
+
+    /**
+     * @var \Estudio
+     *
+     * @ORM\ManyToOne(targetEntity="Estudio")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="id_estudio", referencedColumnName="id")
+     * })
+     */
+    private $idEstudio;
+
+
+
+    /**
+     * Get id
+     *
+     * @return integer 
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * Set nombre
+     *
+     * @param string $nombre
+     * @return RolEstudio
+     */
+    public function setNombre($nombre)
+    {
+        $this->nombre = $nombre;
+
+        return $this;
+    }
+
+    /**
+     * Get nombre
+     *
+     * @return string 
+     */
+    public function getNombre()
+    {
+        return $this->nombre;
+    }
+
+    /**
+     * Set codigo
+     *
+     * @param integer $codigo
+     * @return RolEstudio
+     */
+    public function setCodigo($codigo)
+    {
+        $this->codigo = $codigo;
+
+        return $this;
+    }
+
+    /**
+     * Get codigo
+     *
+     * @return integer 
+     */
+    public function getCodigo()
+    {
+        return $this->codigo;
+    }
+
+    /**
+     * Set status
+     *
+     * @param boolean $status
+     * @return RolEstudio
+     */
+    public function setStatus($status)
+    {
+        $this->status = $status;
+
+        return $this;
+    }
+
+    /**
+     * Get status
+     *
+     * @return boolean 
+     */
+    public function getStatus()
+    {
+        return $this->status;
+    }
+
+    /**
+     * Set idEstudio
+     *
+     * @param \LegalPro\Bundles\CommonBundle\Entity\Estudio $idEstudio
+     * @return RolEstudio
+     */
+    public function setIdEstudio(\LegalPro\Bundles\CommonBundle\Entity\Estudio $idEstudio = null)
+    {
+        $this->idEstudio = $idEstudio;
+
+        return $this;
+    }
+
+    /**
+     * Get idEstudio
+     *
+     * @return \LegalPro\Bundles\CommonBundle\Entity\Estudio 
+     */
+    public function getIdEstudio()
+    {
+        return $this->idEstudio;
+    }
+}

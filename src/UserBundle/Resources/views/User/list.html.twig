@@ -1,0 +1,16 @@
+{% extends 'UserBundle::layout_custom.html.twig' %}
+{% block aside_breadcrumb %}
+{#        {{ knp_menu_render('CommonBundle:BreadcrumbBuilder:usuariosMenu', {'allow_safe_labels': true} ) }}#}
+{% endblock %}
+{% block aside_left %}
+{#    {% render (controller("CommonBundle:Submenu:userList", {'active' : 'empleados'}))%}#}
+{% endblock %}
+{% block body_top %}
+{#    {% render (controller("CommonBundle:Submenu:NAVuserList", {'active' : 'empleados'}))%}#}
+{% endblock %}
+{% block body %}
+    {{ include(
+        'ListViewBundle:ListView:ListPrueba.html.twig',
+        {'data': pagination, 'list':list}
+    )}}
+{% endblock %}

@@ -1,0 +1,44 @@
+{% extends 'ABMBundle::edit.html.twig' %}
+{% block aside_breadcrumb %}
+    {% set breadcrumb = knp_menu_get('AppBundle:BreadcrumbBuilder:expedienteShowMenu', [],{'expediente' : expediente} ) %}
+    {{ knp_menu_render(breadcrumb, {'allow_safe_labels': true} ) }}
+{% endblock %}
+{% block aside_left %}
+    {{ include('AppBundle:Expediente:submenu/sm_general.html.twig') }}
+    <br>
+    {{ include('AppBundle:Expediente:submenu/sm_documento.html.twig') }}
+{% endblock %}
+{#{% block body_top %}
+    {% render (controller("CommonBundle:Submenu:NAVentidadEdit", {'entidad': entidad, 'section': section,'subtitulo':entidad.nombre}))%}
+{% endblock %}#}
+{%block form_widgets %}
+    {{ form_start(abmManager.form) }}
+    {{ form_row(abmManager.form.nombre) }}
+    {{ form_row(abmManager.form.descripcion) }}
+    <div>
+        <a class="btn btn-default" href="{{path("documento_file", {"id":documento.id})}}">
+            <span class="glyphicon glyphicon-download-alt"></span> 
+            Version {{ documento.ultimaVersion }} - {{ documento.fechaModificacion|date('d/m/Y')}}
+        </a>
+    </div>
+    <br>
+    {{ form_row(abmManager.form.accion) }}
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            Version
+        </div>
+        <div class="panel-body">
+            {{ form_row(abmManager.form.lastDocumentoVersion.descripcion) }}
+            {{ form_row(abmManager.form.lastDocumentoVersion.file) }}
+        </div>
+    </div>
+{% endblock %}
+{%block form_buttons %}
+    <div class="form-group text-right">
+{#        HACER: CAMBIAR A LOS BOTONES DEL ABM DE ANDRES #}
+        <a class="btn btn-default" href="{{abmManager.cancelPath}}">Cancelar y Mantener Bloqueado</a>
+        <a class="btn btn-default" href="{{path("documento_unlock", {"id":documento.id})}}">Cancelar y Desbloquear</a>
+        <button type="submit" class="btn btn-primary">Guardar y Desbloquear</button>
+    </div>
+    {{ form_end(abmManager.form) }}
+{% endblock %}

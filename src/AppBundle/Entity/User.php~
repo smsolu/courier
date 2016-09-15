@@ -1,0 +1,71 @@
+<?php
+namespace LegalPro\Bundles\CommonBundle\Entity;
+
+use FOS\UserBundle\Model\User as BaseUser;
+use Doctrine\ORM\Mapping as ORM;
+
+/**
+ * @ORM\Entity
+ * @ORM\Table(name="fos_user")
+ */
+class User extends BaseUser
+{
+    /**
+     * @ORM\Id
+     * @ORM\Column(type="integer")
+     * @ORM\GeneratedValue(strategy="AUTO")
+     */
+    protected $id;
+     /**
+     * @ORM\ManyToOne(targetEntity="Estudio", inversedBy="usuarios")
+     * @ORM\JoinColumn(name="estudio_id", referencedColumnName="id")
+     */
+    protected $estudio;
+
+    public function __construct()
+    {
+        parent::__construct();
+        // your own logic
+    }
+
+    /**
+     * Get id
+     *
+     * @return integer 
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * Set estudio
+     *
+     * @param \LegalPro\Bundles\CommonBundle\Entity\Estudio $estudio
+     * @return User
+     */
+    public function setEstudio(\LegalPro\Bundles\CommonBundle\Entity\Estudio $estudio = null)
+    {
+        $this->estudio = $estudio;
+
+        return $this;
+    }
+
+    /**
+     * Get estudio
+     *
+     * @return \LegalPro\Bundles\CommonBundle\Entity\Estudio 
+     */
+    public function getEstudio()
+    {
+        return $this->estudio;
+    }
+    /**
+     * @ORM\ManyToMany(targetEntity="LegalPro\Bundles\CommonBundle\Entity\Group")
+     * @ORM\JoinTable(name="fos_user_user_group",
+     *      joinColumns={@ORM\JoinColumn(name="user_id", referencedColumnName="id")},
+     *      inverseJoinColumns={@ORM\JoinColumn(name="group_id", referencedColumnName="id")}
+     * )
+     */
+    protected $groups;
+}

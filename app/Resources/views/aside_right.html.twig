@@ -1,0 +1,4 @@
+{#/* WIDGETS */#}
+{% if app.user.username is defined %}
+    {{ render(controller('WidgetBundle:Frontend:showmenu')) }}
+{% endif %}

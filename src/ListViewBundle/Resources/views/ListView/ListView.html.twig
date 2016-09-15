@@ -1,0 +1,57 @@
+    <table class="table table-hover">
+            <thead>
+            <tr>
+                {% for column in list.columns %}
+                   <th>
+                    {% if column.allow_order == "1" %}
+                        {% set order = 1 %}
+                        {% if column.name == list.OrderCol %}
+                            {% set order = list.getNextOrderStatus()%}
+                            {% if list.orderStatus == "1" %} 
+                                <span class="glyphicon glyphicon-chevron-down"></span>
+                            {% elseif list.orderStatus == "2" %}
+                                <span class="glyphicon glyphicon-chevron-up"></span>
+                            {% endif %}
+                        {% endif %}
+                        {% if parameters is not empty %}
+                            {# USAR MERGE ANTES#}
+                            {% set parameters = parameters|merge({ 'order_col' : column.name, 'order_status': order }) %}
+                                <a href='{{ 
+                                    path(list.orderRoute, 
+                                    parameters
+                                ) 
+                            }}'
+                            >{{column.name}}</a>
+                        {% else %}
+                            <a href='{{ 
+                                        path(list.orderRoute, 
+                                        {
+                                            'order_col' : column.name,
+                                            'order_status': order
+                                        }
+                                    ) 
+                               }}'
+                               >{{column.name}}</a>
+                        {%endif%}
+                           
+                    {% else %}    
+                        {{ column.name }}
+                    {% endif %}
+                   </th>
+                {% endfor %}
+            </tr>
+            </thead>
+            {% for row in data %}
+                {{ include(
+                        'ListViewBundle:ListView:Item.html.twig',
+                        {'row': row, 'columns':list.columns, 'format': list.format}
+                    )
+                }}
+            {% endfor %}
+        </table>
+        <div>
+            {%if paginator_enabled is defined %}
+                {{ knp_pagination_render(data) }}
+            {%endif%}
+        </div>
+        

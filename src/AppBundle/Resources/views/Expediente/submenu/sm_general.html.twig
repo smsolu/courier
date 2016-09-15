@@ -1,0 +1,15 @@
+{#
+    REQUIERE:
+        -expediente
+#}
+{% extends '::submenu/submenu.html.twig' %}
+
+{%block heading %}
+    <span class="glyphicon glyphicon-file"></span> Caso
+{% endblock %}
+
+{% block buttons %}
+    <li><a href="{{path('expediente_list')}}"><span class="glyphicon glyphicon-th"></span> Listado</a></li>
+    <li><a href="{{path('expediente_delete',{'id':expediente.id})}}"><span class="glyphicon glyphicon-trash" style="color:red"></span> Eliminar</a></li>
+{% endblock %}    
+        

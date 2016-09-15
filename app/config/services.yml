@@ -1,0 +1,38 @@
+# Learn more about services, parameters and containers at
+# http://symfony.com/doc/current/book/service_container.html
+parameters:
+#    parameter_name: value
+#    service_name:
+#        class: AppBundle\Directory\ClassName
+#        arguments: ["@another_service_name", "plain_value", "%parameter_name%"]
+services:
+    lp_user.registration_listener:
+        class: UserBundle\EventListener\RegistrationListener
+        arguments: ['@router']
+        tags:
+            - { name: kernel.event_subscriber }
+    lp_user.login_handler:
+        class:  UserBundle\Handlers\LoginSuccessHandler
+        arguments:  ['@security.authorization_checker', '@router']
+        tags:
+            - { name: 'monolog.logger', channel: 'security' }
+    lp_user_form_registration:
+        class: UserBundle\Form\Type\RegistrationType
+        tags:
+            - { name: form.type, alias: lp_user_registration }
+    
+    lp_ExpedienteManager:
+        class: AppBundle\Services\ExpedienteManager\ExpedienteManager
+        arguments:    [ "@doctrine.orm.entity_manager", "@security.token_storage", "@form.factory" ]
+    lp_FilesystemManager:
+        class: AppBundle\Services\FilesystemManager\FilesystemManager
+        arguments:    [%lp_filesystemmanager_adapter%, "@security.token_storage" ]
+    lp_TemplateManager:
+        class: AppBundle\Services\DocumentManager\TemplateManager
+        arguments:    [ "@doctrine.orm.entity_manager", "@lp_FilesystemManager", "@security.token_storage" ]
+    lp_DocumentManager:
+        class: AppBundle\Services\DocumentManager\DocumentManager
+        arguments:    [ "@doctrine.orm.entity_manager", "@lp_FilesystemManager", "@security.token_storage" ]
+    lp_TipoCuentaContableManager:
+        class: AppBundle\Services\ContabilidadManager\TipoCuentaContableManager
+        arguments:    [ "@doctrine.orm.entity_manager", "@security.token_storage", "@form.factory" ]        

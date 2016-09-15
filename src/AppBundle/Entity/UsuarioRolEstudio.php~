@@ -1,0 +1,101 @@
+<?php
+
+namespace LegalPro\Bundles\CommonBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+
+/**
+ * UsuarioRolEstudio
+ *
+ * @ORM\Table(name="usuario_rol_estudio", indexes={@ORM\Index(name="fk_usuario_rol_rol_estudio", columns={"id_rol"}), @ORM\Index(name="fk_usuario_rol_usuario", columns={"id_usuario"})})
+ * @ORM\Entity
+ */
+class UsuarioRolEstudio
+{
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="id", type="integer", nullable=false)
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="IDENTITY")
+     */
+    private $id;
+
+    /**
+     * @var \RolEstudio
+     *
+     * @ORM\ManyToOne(targetEntity="RolEstudio")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="id_rol", referencedColumnName="id")
+     * })
+     */
+    private $idRol;
+
+    /**
+     * @var \Usuario
+     *
+     * @ORM\ManyToOne(targetEntity="Usuario")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="id_usuario", referencedColumnName="id")
+     * })
+     */
+    private $idUsuario;
+
+
+
+    /**
+     * Get id
+     *
+     * @return integer 
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * Set idRol
+     *
+     * @param \LegalPro\Bundles\CommonBundle\Entity\RolEstudio $idRol
+     * @return UsuarioRolEstudio
+     */
+    public function setIdRol(\LegalPro\Bundles\CommonBundle\Entity\RolEstudio $idRol = null)
+    {
+        $this->idRol = $idRol;
+
+        return $this;
+    }
+
+    /**
+     * Get idRol
+     *
+     * @return \LegalPro\Bundles\CommonBundle\Entity\RolEstudio 
+     */
+    public function getIdRol()
+    {
+        return $this->idRol;
+    }
+
+    /**
+     * Set idUsuario
+     *
+     * @param \LegalPro\Bundles\CommonBundle\Entity\Usuario $idUsuario
+     * @return UsuarioRolEstudio
+     */
+    public function setIdUsuario(\LegalPro\Bundles\CommonBundle\Entity\Usuario $idUsuario = null)
+    {
+        $this->idUsuario = $idUsuario;
+
+        return $this;
+    }
+
+    /**
+     * Get idUsuario
+     *
+     * @return \LegalPro\Bundles\CommonBundle\Entity\Usuario 
+     */
+    public function getIdUsuario()
+    {
+        return $this->idUsuario;
+    }
+}

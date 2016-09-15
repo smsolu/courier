@@ -1,0 +1,27 @@
+{% extends 'ABMBundle::new.html.twig' %}
+{% block aside_breadcrumb %}
+    {% set breadcrumb = knp_menu_get('AppBundle:BreadcrumbBuilder:expedienteShowMenu', [],{'expediente' : expediente} ) %}
+    {{ knp_menu_render(breadcrumb, {'allow_safe_labels': true} ) }}
+{% endblock %}
+
+{% block aside_left %}
+
+{% endblock %}
+{% block body_top %}
+    {{ include('AppBundle:Expediente:cabecera.html.twig') }}
+    {{ include('AppBundle:Expediente:subnav/subnav.html.twig') }}
+{% endblock %}
+{#{% block form_widgets %} 
+     {{parent()}}
+     
+    <div class="form-group" >  
+        <label class="control-label required" for="cboInterviniente">Agregar Abogado:</label>
+        {{ include(
+            'CommonBundle:Controls:ComboBox.html.twig',
+            {'data': Abogados,'disabled': false,
+            'controlName': "cboAbogado",'labelField': "nombre", 'idField': "id",'rowSelected':null,'autocomplete':false}
+            )
+        }}
+    </div>
+     
+{%endblock%}#}

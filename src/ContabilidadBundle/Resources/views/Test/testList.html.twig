@@ -1,0 +1,25 @@
+{% extends '::base.html.twig' %}
+{% block body %}
+
+    {% if titulo is defined %}
+        <h1>{{titulo}}</h1>
+    {%endif%}
+    {% if expediente is defined %}
+        Expediente: <b>{{expediente.getNumeroyCaratulaCompleto}}</b><br>
+    {%endif%}
+    {% if entidad is defined %}
+        Entidad: <b>{{entidad.getNombre}}</b><br>
+    {%endif%}
+    {% if tiempo is defined %}
+        Tiempo Total: <b>{{tiempo}} ms.</b><br>
+    {%endif%}
+    
+    <br><br>
+    
+    
+    {{ include(
+            'ListViewBundle:ListView:ListView.html.twig',
+            {'data': operaciones, 'list': list, 'parameters': ''})
+    }}
+   
+{% endblock %}    

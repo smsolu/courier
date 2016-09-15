@@ -1,0 +1,131 @@
+<?php
+
+namespace LegalPro\Bundles\CommonBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+
+/**
+ * PermisoRol
+ *
+ * @ORM\Table(name="permiso_rol", indexes={@ORM\Index(name="fk_permiso_rol_permiso", columns={"id_permiso"}), @ORM\Index(name="fk_permiso_rol_rol_estudio", columns={"id_rol_estudio"})})
+ * @ORM\Entity
+ */
+class PermisoRol
+{
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="id", type="integer", nullable=false)
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="IDENTITY")
+     */
+    private $id;
+
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="status", type="boolean", nullable=true)
+     */
+    private $status;
+
+    /**
+     * @var \Permiso
+     *
+     * @ORM\ManyToOne(targetEntity="Permiso")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="id_permiso", referencedColumnName="id")
+     * })
+     */
+    private $idPermiso;
+
+    /**
+     * @var \RolEstudio
+     *
+     * @ORM\ManyToOne(targetEntity="RolEstudio")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="id_rol_estudio", referencedColumnName="id")
+     * })
+     */
+    private $idRolEstudio;
+
+
+
+    /**
+     * Get id
+     *
+     * @return integer 
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * Set status
+     *
+     * @param boolean $status
+     * @return PermisoRol
+     */
+    public function setStatus($status)
+    {
+        $this->status = $status;
+
+        return $this;
+    }
+
+    /**
+     * Get status
+     *
+     * @return boolean 
+     */
+    public function getStatus()
+    {
+        return $this->status;
+    }
+
+    /**
+     * Set idPermiso
+     *
+     * @param \LegalPro\Bundles\CommonBundle\Entity\Permiso $idPermiso
+     * @return PermisoRol
+     */
+    public function setIdPermiso(\LegalPro\Bundles\CommonBundle\Entity\Permiso $idPermiso = null)
+    {
+        $this->idPermiso = $idPermiso;
+
+        return $this;
+    }
+
+    /**
+     * Get idPermiso
+     *
+     * @return \LegalPro\Bundles\CommonBundle\Entity\Permiso 
+     */
+    public function getIdPermiso()
+    {
+        return $this->idPermiso;
+    }
+
+    /**
+     * Set idRolEstudio
+     *
+     * @param \LegalPro\Bundles\CommonBundle\Entity\RolEstudio $idRolEstudio
+     * @return PermisoRol
+     */
+    public function setIdRolEstudio(\LegalPro\Bundles\CommonBundle\Entity\RolEstudio $idRolEstudio = null)
+    {
+        $this->idRolEstudio = $idRolEstudio;
+
+        return $this;
+    }
+
+    /**
+     * Get idRolEstudio
+     *
+     * @return \LegalPro\Bundles\CommonBundle\Entity\RolEstudio 
+     */
+    public function getIdRolEstudio()
+    {
+        return $this->idRolEstudio;
+    }
+}

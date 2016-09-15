@@ -1,0 +1,34 @@
+{% extends 'UserBundle::layout_custom.html.twig' %}
+{% block aside_breadcrumb %}
+    {% set breadcrumb = knp_menu_get('CommonBundle:BreadcrumbBuilder:usuarioShowMenu', [],{'user' : user} ) %}
+    {{ knp_menu_render(breadcrumb, {'allow_safe_labels': true, 'parametro' : 'bla'} ) }}
+{% endblock %}
+{% block aside_left %}
+    {% render (controller("CommonBundle:Submenu:userShow", {'active' : 'grupos', 'user' : user}))%}
+    {% render (controller("CommonBundle:Submenu:userShowGroups", {'active' : 'grupos', 'user' : user})) %}
+{% endblock %}
+{% block body_top %}
+    {% render (controller("CommonBundle:Submenu:NavuserShowGroups", {'active' : 'grupos', 'user' : user})) %}
+{% endblock %}
+{% block body %}
+    <h3>{{user.username}}</h3>
+    <br>
+    <table class='table'>
+        {% for group in user.Groups %}
+        <tr>
+            <td><a href="{{path('user_remove-group', {'id': user.id, 'idGroup':group.id})}}"> <span class="glyphicon glyphicon-remove"></a></td>
+            <td>{{ group.name }}</td>
+        </tr>
+        {% endfor %}
+        <tr>
+            <td></td>
+            <td>
+                {{ form_start(form, {'attr': {'class': 'form-inline'}}) }}
+                {{ form_widget(form.group, {'attr': {'class': 'form-control'}}) }}
+                {{ form_widget(form.Agregar, {'attr': {'class': 'btn btn-default'}}) }}
+                {{ form_widget(form) }}
+                {{ form_end(form) }}
+            </td>
+        </tr>
+    </table>
+{% endblock%}

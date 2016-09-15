@@ -1,0 +1,17 @@
+{% extends 'UserBundle::layout.html.twig' %}
+{% block aside_breadcrumb %}
+    {{ knp_menu_render('CommonBundle:BreadcrumbBuilder:profileMenu', {'allow_safe_labels': true} ) }}
+{% endblock %}
+{% block aside_left %}
+    {% render (controller("CommonBundle:Submenu:profile", {'active' : 'datos_de_cuenta'})) %}
+{% endblock %}
+{% block body %}
+    <form action="{{ path('fos_user_profile_edit') }}" {{ form_enctype(form) }} method="POST" class="fos_user_profile_edit">
+        {# AL PONERLO GENERICO SE ILUMINA CUANDO UN DATO ES INCORRECTO        #}
+        {{ form_widget(form) }}
+        <div class="form-group col-xs-12 col-sm-12 text-right">
+            <a href="{{ path("fos_user_profile_show") }}">{%trans%}boton_cancel{%endtrans%}</a>
+            <input class="btn btn-primary" type="submit" value="{%trans%}boton_modify{%endtrans%}" />
+        </div>
+    </form>
+{% endblock %}

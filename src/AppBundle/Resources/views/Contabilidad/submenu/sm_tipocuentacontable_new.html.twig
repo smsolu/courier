@@ -1,0 +1,14 @@
+{#
+    REQUIERE:
+        -NADA
+#}
+{% extends '::submenu/submenu.html.twig' %}
+
+{%block heading %}
+    <span class="glyphicon glyphicon-usd"> Nueva Cuenta</span>
+{% endblock %}
+
+{% block buttons %}
+    <li><a href="{{path('contabilidad_tipocuentas_list', {})}}">Cancelar</a></li>
+{% endblock %}    
+        

@@ -1,0 +1,37 @@
+{% extends 'CommonBundle:ABM:show.html.twig' %}
+{% block aside_breadcrumb %}
+    {#{% set breadcrumb = knp_menu_get('CommonBundle:BreadcrumbBuilder:entidadListMenu', [],{'tipoEntidad' : tipoEntidad} ) %}#}
+{#    {{ knp_menu_render(breadcrumb, {'allow_safe_labels': true, 'parametro' : 'bla'} ) }}#}
+{% endblock %}
+{% block aside_left %}
+    {% render (controller("CommonBundle:Submenu:expedienteIntervinientelist", {'expediente': expediente, 'seccion': seccion}))%}
+{% endblock %}
+{% block body_top %}
+    {% render (controller("CommonBundle:Submenu:NAVexpedienteIntervinientelist", {'expediente': expediente, 'seccion': seccion, 'route':app.request.attributes.get('_route'),'route_params':app.request.attributes.get('_route_params')}))%}
+{% endblock %}
+{% block form_widgets %} 
+     {{parent()}}
+     
+    <div class="form-group" >  
+        <label class="control-label required" for="cboTipoActuacion">Tipo de Actuacion:</label>
+        <input id="" name="" disabled="disabled" class="form-control" type="text" value ="{{actuacion.tipoactuacion.nombre}}">
+    </div>
+    <div class="form-group" >  
+        <label class="control-label required" for="cboInterviniente">Interviniente:</label>
+        {%if actuacion.interviniente is not null%}
+            {% set interviniente_nombre = actuacion.interviniente.nombre %}
+        {%else%}
+            {% set interviniente_nombre = '[SIN INTERVINIENTE ASOCIADO]' %}
+        {%endif%}        
+        <input id="" name="" disabled="disabled" class="form-control" type="text" value ="{{interviniente_nombre}}">
+    </div>
+    <div class="form-group" >  
+        <label class="control-label required" for="cboAbogado">Abogado:</label>
+        {%if actuacion.abogadoresponsable is not null%}
+            {%set abogadoresponsable_nombre = actuacion.abogadoresponsable.nombre %}
+        {%else%}
+            {%set abogadoresponsable_nombre = '[SIN ABOGADO ASOCIADO]' %}
+        {%endif%}
+        <input id="" name="" disabled="disabled" class="form-control" type="text" value ="{{abogadoresponsable_nombre}}">
+    </div>          
+{%endblock%}

@@ -1,0 +1,16 @@
+{% extends 'ABMBundle::_layout.html.twig' %}
+{% block form_buttons %}
+    <div class="form-group text-right">
+            {% if abmManager.ShowButtonCancel %}
+                <a href="{{ abmManager.cancelPath }}">{%trans%}boton_cancel{%endtrans%}</a>
+            {%endif%}
+            
+            {% if abmManager.ShowButtonModify %}
+                <input class="btn btn-primary" name = "modificar" type="submit" value="{%trans%}boton_savemodify{%endtrans%}" />
+            {%endif%}
+            
+            {% if abmManager.ShowButtonSave %}
+                <input class="btn btn-primary" name= "guardar" type="submit" value="{%trans%}boton_save{%endtrans%}" />
+            {%endif%}
+    </div>
+{% endblock %}

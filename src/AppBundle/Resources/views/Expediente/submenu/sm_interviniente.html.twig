@@ -1,0 +1,15 @@
+{#
+    REQUIERE:
+        -expediente
+#}
+{% extends '::submenu/submenu.html.twig' %}
+
+{%block heading %}
+    <span class="glyphicon glyphicon-user"> Interviniente</span>
+{% endblock %}
+
+{% block buttons %}
+    <li><a href="{{path('expediente_intervinientes_new', {'id':expediente.id})}}"><span class="glyphicon glyphicon-plus"></span> Nuevo</a></li>
+    <li><a href=""><span class="glyphicon glyphicon-search"></span> Buscar</a></li>
+{% endblock %}    
+        

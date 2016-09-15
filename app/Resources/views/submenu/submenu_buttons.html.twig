@@ -1,0 +1,16 @@
+{#
+    MODOS DE USO:
+    Redefinir bloques:
+        -Bloque heading: Contiene el titulo del menu
+    Enviar Array de AbmButton llamado buttons
+#}
+{% extends '::submenu/submenu.html.twig' %}
+
+{% block buttons %}
+    {% for button in buttons %}
+        {%if button.menuVisible %}
+            <li><a href="{{button.route}}">{{button.label|raw}}</a></li>
+        {%endif%}
+    {%endfor%}
+{% endblock %}    
+

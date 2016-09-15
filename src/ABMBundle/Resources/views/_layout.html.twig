@@ -1,0 +1,62 @@
+{#
+    Bloques:
+        -aside_left:    Botonera izquierda, por defecto en blanco.
+        -body:          Cuerpo principal del formulario. Contiene otros bloques dentro:
+            -message:       Barra de mensajes superior.
+            -title:         Barra de titulo de la pantalla. Por defecto muestra un titulo y un subtitulo
+            -form_widgets:  Muestra todos los campos del formulario. Por defecto uno abajo del otro.
+            -form_buttons:  Muestra los botones del formulario. Por defecto 3: Cancelar, Guardar y Editar, Guardar.
+    Variables:
+        -abmManager
+            -form:          El formulario. Se usa fuera de los bloques para el form_start y form_end y dentro del bloque "form_widgets"
+            -cancelPath    Contiene la url a la que ira en caso de cliquear en cancelar. Se usa dentro del bloque "form_buttons"
+            -message:       (OPCIONAL)El mensaje a mostrar. Se usa dentro del bloque "message"
+            -title:         (OPCIONAL)El titulo del formulario. Se usa dentro del bloque "title"
+            -subtitle:      (OPCIONAL)El subtitulo del formulario. Se usa dentro del bloque "title"
+#}
+{% extends '::base.html.twig' %}
+{% block aside_left %}{% endblock %}
+{% block body %}
+    {% block message %}
+        {% if abmManager.message is defined %}
+            <div>{{abmManager.message}}</div>
+        {% endif %}
+    {% endblock %}
+    {% block body_title %}
+        {% if abmManager.title is defined %}
+            <h3>{{abmManager.title}}</h3>
+         {%endif%}
+        {% if abmManager.subtitle is defined %}
+{#            <h4>{{abmManager.subtitle}}</h4>#}
+{#            <hr>#}
+         {%endif%}
+    {% endblock %}
+    {{ form_start(abmManager.form) }}
+    {% block form_widgets %}    
+        {% if abmManager.fields is empty  %}
+            {{ form_widget(abmManager.form) }}
+        {% else %}
+            {% for field in abmManager.fields %}
+                {{ form_row(attribute(abmManager.form,field)) }}
+            {% endfor %}
+        {% endif %}
+    {% endblock %}
+    <hr>
+    {% block form_buttons %}
+        <div class="form-group text-right">
+            {% if abmManager.ShowButtonCancel == true %}
+                <a href="{{ abmManager.cancelPath }}">{%trans%}boton_cancel{%endtrans%}</a>
+            {%endif%}
+            
+            {% if abmManager.ShowButtonModify== true %}
+                <input class="btn btn-primary" name = "modificar" type="submit" value="{%trans%}boton_savemodify{%endtrans%}" />
+            {%endif%}
+            
+            {% if abmManager.ShowButtonSave == true %}
+                <input class="btn btn-primary" name= "guardar" type="submit" value="{%trans%}boton_save{%endtrans%}" />
+            {%endif%}
+        </div>
+    {% endblock %}
+    {{ form_end(abmManager.form, {'render_rest': false}) }}
+    
+{% endblock %}

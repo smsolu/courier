@@ -1,0 +1,45 @@
+{% extends 'CommonBundle:ABM:new.html.twig' %}
+{% block aside_breadcrumb %}
+    {#{% set breadcrumb = knp_menu_get('CommonBundle:BreadcrumbBuilder:entidadListMenu', [],{'tipoEntidad' : tipoEntidad} ) %}#}
+{#    {{ knp_menu_render(breadcrumb, {'allow_safe_labels': true, 'parametro' : 'bla'} ) }}#}
+{% endblock %}
+{% block aside_left %}
+    {% render (controller("CommonBundle:Submenu:expedienteIntervinientelist", {'expediente': expediente, 'seccion': seccion}))%}
+{% endblock %}
+{% block body_top %}
+    {% render (controller("CommonBundle:Submenu:NAVexpedienteIntervinientelist", {'expediente': expediente, 'seccion': seccion, 'route':app.request.attributes.get('_route'),'route_params':app.request.attributes.get('_route_params')}))%}
+{% endblock %}
+{% block form_widgets %} 
+     {{parent()}}
+     
+    <div class="form-group" >  
+        <label class="control-label required" for="cboTipoActuacion">Tipo de Actuacion:</label>
+        {{ include(
+            'CommonBundle:Controls:ComboBox.html.twig',
+            {'data': TipoActuaciones,'disabled': false,
+            'controlName': "cboTipoActuacion",'labelField': "nombre", 'idField': "id"
+            ,'rowSelected':null,'autocomplete':false}
+            )
+        }}
+    </div>
+    <div class="form-group" >  
+        <label class="control-label required" for="cboInterviniente">Interviniente:</label>
+        {{ include(
+            'CommonBundle:Controls:ComboBox.html.twig',
+            {'data': Intervinientes,'disabled': false,
+            'controlName': "cboInterviniente",'labelField': "intervinientenombre", 'idField': "entidadid"
+            ,'rowSelected':null,'autocomplete':false}
+            )
+        }}
+    </div>
+    <div class="form-group" >  
+        <label class="control-label required" for="cboAbogado">Abogado:</label>
+        {{ include(
+            'CommonBundle:Controls:ComboBox.html.twig',
+            {'data': Abogados,'disabled': false,
+            'controlName': "cboAbogado",'labelField': "intervinientenombre", 'idField': "entidadid"
+            ,'rowSelected':null,'autocomplete':false}
+            )
+        }}
+    </div>          
+{%endblock%}

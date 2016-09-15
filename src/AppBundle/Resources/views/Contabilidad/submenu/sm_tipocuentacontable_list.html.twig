@@ -1,0 +1,15 @@
+{#
+    REQUIERE:
+        -NADA
+#}
+{% extends '::submenu/submenu.html.twig' %}
+
+{%block heading %}
+    <span class="glyphicon glyphicon-usd"> Tipos de Cuenta</span>
+{% endblock %}
+
+{% block buttons %}
+    <li><a href="{{path('contabilidad_tipocuentas_new', {})}}"><span class="glyphicon glyphicon-plus"></span> Nuevo</a></li>
+    <li><a href=""><span class="glyphicon glyphicon-search"></span> Buscar</a></li>
+{% endblock %}    
+        

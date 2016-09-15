@@ -1,0 +1,29 @@
+contabilidad:
+    resource: "@ContabilidadBundle/Controller"
+    type:     annotation
+    prefix:   /
+abm:
+    resource: "@ABMBundle/Controller/"
+    type:     annotation
+    prefix:   /
+
+list_view:
+    resource: "@ListViewBundle/Controller/"
+    type:     annotation
+    prefix:   /
+
+fos_user:
+    resource: "@FOSUserBundle/Resources/config/routing/all.xml"
+
+fos_user_group:
+    resource: "@FOSUserBundle/Resources/config/routing/group.xml"
+    prefix: /group
+
+user:
+    resource: "@UserBundle/Controller/"
+    type:     annotation
+    prefix: app
+    
+app:
+    resource: "@AppBundle/Controller/"
+    type:     annotation

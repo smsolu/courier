@@ -1,0 +1,8 @@
+{% extends 'ABMBundle::_layout.html.twig' %}
+{% block form_buttons %}
+    <div class="form-group text-right">
+    {% if abmManager.ShowButtonModify == true %}
+        <a class="btn btn-primary" href="{{ abmManager.editPath }}">{%trans%}boton_modify{%endtrans%}</a>
+    {%endif%}
+    </div>
+{% endblock %}

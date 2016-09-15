@@ -1,0 +1,15 @@
+{#
+    REQUIERE:
+        -NADA
+#}
+{% extends '::submenu/submenu.html.twig' %}
+
+{%block heading %}
+    <span class="glyphicon glyphicon-file"> Casos</span>
+{% endblock %}
+
+{% block buttons %}
+    <li><a href="{{path('expediente_new', {})}}"><span class="glyphicon glyphicon-plus"></span> Nuevo</a></li>
+    <li><a href=""><span class="glyphicon glyphicon-search"></span> Buscar</a></li>
+{% endblock %}    
+        

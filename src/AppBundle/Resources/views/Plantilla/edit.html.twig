@@ -1,0 +1,7 @@
+{% extends 'ABMBundle::edit.html.twig' %}
+{% block aside_breadcrumb %}
+    {{ knp_menu_render('AppBundle:BreadcrumbBuilder:plantillaMenu', {'allow_safe_labels': true} ) }}
+{% endblock %}
+{% block aside_left %}
+    {{ include('AppBundle:Plantilla:submenu/sm_plantilla.html.twig') }}
+{% endblock %}

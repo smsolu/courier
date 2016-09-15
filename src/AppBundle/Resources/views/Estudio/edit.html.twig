@@ -1,0 +1,10 @@
+{% extends 'CommonBundle:ABM:edit.html.twig' %}
+{% block aside_breadcrumb %}
+    {{ knp_menu_render('CommonBundle:BreadcrumbBuilder:estudioMenu', {'allow_safe_labels': true} ) }}
+{% endblock %}
+{% block aside_left %}    
+    {% render (controller("CommonBundle:Submenu:estudioEdit", {'section' : 'estudio_general','estudio':estudio}))%}
+{% endblock %}
+{% block body_top %}    
+    {% render (controller("CommonBundle:Submenu:NavestudioEdit", {'section' : 'estudio_general', 'estudio':estudio}))%}
+{% endblock %}

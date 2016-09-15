@@ -1,0 +1,95 @@
+{#RECIBE: RESULT, TIPO, USUARIO,ESTUDIO#}
+
+{%if not autocomplete is defined %}
+    {% set autocomplete = false %}
+{%endif%}
+
+{%if disabled== true %}
+    {% set lbldisabled = ' disabled' %}
+{%else%}
+    {% set lbldisabled = ''%}
+{%endif%}
+{%if not rowSelected is defined %}
+    {% set rowSelected = data|first %}
+{%endif%}
+{%if  rowSelected is null %}
+    {% set rowSelected = data|first %}
+{%endif%}
+
+{%if autocomplete == false %}
+    <select id="{{controlName}}" name="{{ controlName }}"  class="form-control" {{lbldisabled}}>            
+        {% if disabled == false %}
+            {%for row in data  %}
+                {{dump(row)}}
+                
+                {%if attribute(row, idField) == attribute(rowSelected, idField) %}
+                    {% set lblSelected = "selected" %}
+                 {%else%}
+                     {% set lblSelected = "" %}
+                {%endif%}
+                <option value="{{attribute(row, idField)}}" {{lblSelected}}>{{attribute(row, labelField)}}</option> 
+            {%endfor%}
+        {% else %}
+            <option value="{{attribute(rowSelected, idField)}}">{{attribute(rowSelected, labelField)}}</option> 
+        {%endif%}
+    </select>
+{%else%}
+        {# AUTOCOMPLETE #}
+        <div class="autocomplete">
+            {% if disabled == true %}
+                {%set text_value = attribute(rowSelected, labelField) %}
+            {%else%}
+                {%set text_value = ""%}
+            {%endif%}
+            <input id="{{controlName}}" name="{{controlName}}" class="form-control" value ="{{text_value}}" {{lbldisabled}}>
+        </div>    
+
+        <script>
+            jQuery(document).ready(function($){
+                /* Una vez que se cargo la pagina , llamo a todos los autocompletes y
+                 * los inicializo */
+                $('.autocomplete').autocomplete();
+                $('#{{controlName}}').attr("data-source","http://localhost/ejemplo/search.php?search=");
+            });
+        </script>        
+        
+    {% block javascripts %}
+        
+{#        <script>
+            $(document).ready(function(){
+                /* Una vez que se cargo la pagina , llamo a todos los autocompletes y
+                 * los inicializo */
+                $('.autocomplete').autocomplete();
+                $('#autocomp').attr("data-source","http://localhost/ejemplo/search.php?search=");
+            });
+        </script>#}
+        {#<script>
+            $(function() {
+              var cache = {};
+              $( "#{{controlName}}" ).autocomplete({
+                minLength: 2,
+                source: function( request, response ) {
+                  var term = request.term;
+                  if ( term in cache ) {
+                    response( cache[ term ] );
+                    return;
+                  }
+
+
+
+                  $.ajax({
+                          type: "POST",
+                          url: "http://localhost/ejemplo/search2.php?=",
+                          data: request,
+                          dataType: "json",
+                          success: function(data) {
+                              cache[ term ] = data;
+                              response( data );
+                          }
+                      });        
+                }
+              });
+            });
+        </script>#}
+    {% endblock %}
+{%endif%}

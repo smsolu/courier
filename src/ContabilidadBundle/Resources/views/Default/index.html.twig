@@ -1,0 +1,62 @@
+{% extends '::base.html.twig' %}
+{% block body %}
+
+    {% if mensaje is defined %}
+        <h1>{{mensaje}}</h1>
+    {%endif%}
+    {% if SaldoCC is defined %}
+        <b>Saldo Cuenta Corriente: {{SaldoCC}} || Saldo Cuenta Corriente (Sin Calcular): {{saldocc_sincalcular}} </b><br>
+        <b>MPA: {{MPA}} || MPA (Sin Calcular): {{mpa_sincalcular}} </b>
+    {%endif%}
+
+
+    {% if var1 is defined %}
+        {{var1_titulo}}  {{var1}}
+    {% endif %}
+
+    {% if var2 is defined %}
+        {{var2_titulo}} {{var2}}
+    {% endif %}
+
+    {% if var3 is defined %}
+        {{var3_titulo}} {{var3}}
+    {% endif %}
+
+    {% if deuda is defined %}
+        {% dump(deuda) %}
+    {% endif %}
+
+    {% if cobro is defined %}
+        {% dump(cobro) %}
+    {% endif %}
+
+
+
+    {%if list is defined %}
+        <h3>Deudas</h3>
+        {% render (controller("CommonBundle:ListView:ListView", {'request': request, 'listview': list, 'parameters':parameters}))%}
+    {%endif%}
+
+    {%if list2 is defined %}
+        <h3>Cobros</h3>
+        {% render (controller("CommonBundle:ListView:ListView", {'request': request, 'listview': list2, 'parameters':parameters}))%}
+    {%endif%}
+
+    <a class="btn btn-default" href="{{path("cc_autoasignarmpa",{"algoritmo":0}) }}">Autoasignar MPA mas viejas primero</a>
+    <a class="btn btn-default" href="{{path("cc_autoasignarmpa",{"algoritmo":1})}}">Autoasignar MPA mas nuevas primero</a>
+    <a class="btn btn-default" href="{{path("cc_autoasignarmpa",{"algoritmo":2})}}">Autoasignar MPA con mas monto primero</a>
+    <a class="btn btn-default" href="{{path("cc_autoasignarmpa",{"algoritmo":3})}}">Autoasignar MPA con menos monto primero</a>
+    
+    <br>
+    <a class="btn btn-default" href="{{path("cc_creardeuda")}}">Crear Deuda</a>
+    <a class="btn btn-default" href="{{path("cc_crearcobro")}}">Crear Cobro</a>
+    <a class="btn btn-default" href="{{path("cc_reset")}}">RESET</a>
+    
+    
+    <a class="btn btn-default" href="{{ path("cc_clear",{'logical':"false"})  }}">CLEAR CC -FISICA</a>
+    <a class="btn btn-default" href="{{ path("cc_clear",{'logical':"true"})  }}">CLEAR CC - LOGICAL</a>
+{#    <a class="btn btn-default" href="{{ path("cc_clear",{'logical':false})  }}">CLEAR CC - FISICA</a>#}
+
+
+
+    {% endblock %}    

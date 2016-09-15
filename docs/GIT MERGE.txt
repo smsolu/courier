@@ -1,0 +1,8 @@
+-Git commit (si no comiteaste tus ultimos cambios)
+-Git pull (obtengo el develop actualizado)
+-git checkout develop (me paro sobre el develop local)
+-git merge /nombre del branch/
+----Podria pedirte que hagas merge manual
+-git push (para actualizar el develop en el servidor)
+-git branch -d /nombre del branch/ (para borrar local)
+-git push origin --delete {the_remote_branch} (para borrar remoto)

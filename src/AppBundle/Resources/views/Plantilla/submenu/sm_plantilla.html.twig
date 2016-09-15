@@ -1,0 +1,11 @@
+{% extends '::submenu/submenu.html.twig' %}
+
+{%block heading %}
+    <span class="glyphicon glyphicon-duplicate"> Plantillas</span>
+{% endblock %}
+
+{% block buttons %}
+    <li><a href="{{path('plantilla_new')}}"><span class="glyphicon glyphicon-plus"></span> Nueva</a></li>
+    <li><a href=""><span class="glyphicon glyphicon-search"></span> Buscar</a></li>
+{% endblock %}    
+        

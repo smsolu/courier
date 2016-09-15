@@ -1,0 +1,3 @@
+services:
+    ABM_AbmManager:
+            class: ABMBundle\Services\AbmManager

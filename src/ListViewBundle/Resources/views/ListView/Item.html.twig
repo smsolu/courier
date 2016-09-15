@@ -1,0 +1,43 @@
+{% if format is defined and not format is empty %}
+    <tr class="{{format.getClassRow(row)}}" >
+{% else %}
+    <tr>
+{% endif %}
+    {% for column in columns %}
+        {% if format is defined and not format is empty %}
+            <td class="{{format.getClassCell(row, column.name)}}" >
+        {% else %}
+            <td>
+        {% endif %}
+                {%if column.type == 'object' %}
+                    {% set obj = attribute(row, column.object) %}
+                    {% set columnName = column.property %}
+                {%else%}
+                    {% set columnName = column.column %}
+                    {% set obj = row %}                    
+                {%endif%}
+        
+                {% if column.type == 'link' %}
+                    <a href="{{ path(column.route.getRouteName, column.route.getRouteParameters(row)) }}">{{ column.value|raw }}</a>
+                {% else %}
+                    {% if column.type == 'string' %}
+                        {{attribute(obj, columnName)}}
+                    {% elseif column.type == 'datetime' %}
+                        {{ attribute(obj, columnName)|date("d/m/Y H:i") }}
+                    {% elseif column.type == 'date' %}
+                        {{attribute(obj, columnName)|date("d/m/Y") }}
+                    {% elseif column.type == 'raw' %}
+                        {{attribute(obj, columnName)|raw }}
+                    {% elseif column.type == 'time' %}
+                        {{ attribute(obj, columnName)|date("H:i") }}
+                    {% elseif column.type == 'boolean' %}
+                        {{ attribute(obj, columnName)? 'Si':'No' }}                        
+                    {% elseif column.type == 'money' %}
+                        {{ '$ ' ~ attribute(obj, columnName)|number_format(2, ',', '.') }}                        
+                    {% else %}
+                       {{attribute(obj, columnName)}}
+                    {% endif %}
+                {% endif %}
+            </td>
+    {% endfor %}
+</tr>

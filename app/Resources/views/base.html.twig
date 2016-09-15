@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8" />
+        <title>{% block title %}{% trans %}title{% endtrans %}{% endblock %}</title>
+        <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
+        {% block stylesheets %}
+            <link rel="stylesheet" href="{{ asset('https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css') }}"/>              <!-- Importación del framework css -->
+            <link rel="stylesheet" href="{{ asset('https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap-theme.min.css') }}"/> <!-- importación del tema css (Esto es opcional) -->
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/2.4.0/fullcalendar.min.css"/>            
+            <meta name="viewport" content="width=device-width, initial-scale=1"/>
+        {% endblock %}
+    </head>
+    <body>        
+
+        {#MENÚ        #}
+        {{ include(':menu:menu.html.twig')}}
+
+
+        {# ESPACIO PARA DEJAR FIJO EL TITULO       #}
+        <div style="height: 55px;"> 
+        </div>
+ 
+        <aside class='container-fluid col-lg-12'>
+            {% block aside_breadcrumb %}
+{#                {{ include('::aside_breadcrumb.html.twig')}}#}
+            {% endblock %}
+        </aside>
+  
+        <aside class='col-md-2 col-xs-12'>
+            {% block aside_left %}
+{#                {{ include('::aside_left.html.twig')}}#}
+            {% endblock %}
+        </aside>
+      
+        <div class="container-fluid col-md-7 col-xs-12">
+            <aside>
+            {% block msg %}
+                {{ include('::aside_alerts.html.twig')}}
+            {% endblock %}
+            </aside>
+            <article>
+                {% block body_top %}{% endblock %}
+                {% block body %}{% endblock %}
+                {% block body_bottom %}{% endblock %}                
+            </article>
+        </div>
+        <aside class='col-md-3 col-xs-12'>
+            {% block aside_right %}
+{#                {{ include('::aside_right.html.twig')}}#}
+            {% endblock %}
+        </aside>
+      
+        {% block javascripts %}
+            <script src="{{ asset('http://code.jquery.com/jquery.js') }}"></script>
+            <script src="{{ asset('https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js') }}"></script> <!-- Importación del framework en js -->
+        
+{#      CALENDARIO#}
+{#        <script src="http://code.jquery.com/jquery.js"></script>#}
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.6/moment.min.js"></script> 
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/2.4.0/fullcalendar.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/2.4.0/lang/es.js"></script> 
+        
+        {% endblock %}
+    
+{#          </div>          #}
+
+    </body>
+</html>

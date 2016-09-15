@@ -1,0 +1,77 @@
+    {%set obj = expediente %}
+    {#{%if arrayData.maximized is not defined%}#}
+        {%set maximized = 1 %}
+{#    {%else%}#}
+{#        {%set maximized = arrayData.maximized %}#}
+{#    {%endif%}#}
+    
+    {%if maximized == 0 %}
+        {%set class_panel = "panel-collapse collapse"%}
+    {%else%}
+        {%set class_panel = "panel-collapse collapse in"%}
+    {%endif%}
+    
+    <div class="panel-group" id="accordion">
+        <a data-toggle="collapse" data-target="#collapseOne"  href="#collapseOne">
+            <h4> {{expediente.NumeroCompleto}}</h4> 
+        </a>  
+        <span class="badge">
+            {%set favorito = obj.isUsuarioFavorito(app.user)%}
+            
+            <a href={{ path("set_expediente_favorito", {'id': obj.id, 'route': "" }) }}>
+                {%if favorito == 1%}
+                    <span class="glyphicon glyphicon-star" style ="color:yellow"></span>
+                {%else%}
+                    <span class="glyphicon glyphicon-star-empty" style ="color:yellow"></span>
+                {%endif%}
+            </a>
+        </span>
+        
+        <div id="collapseOne" class="{{class_panel}}">
+            <div align = "center"  style = "margin:5px;padding:5px;"> <i>{{obj.caratula }}</i></div>
+            
+            {#  HACER SACAR LOS CSS Y SACAR EL WELL YA QUE SOLO ES PARA LOS BORDES REDONDEADOS           #}
+            <div class="col-xs-12 well well-lg" style="padding:5px;margin:5px;color:white;background: #294B6B;">
+                <div class="col-md-2 text-left">
+                    <div class="row">
+                        <b>Naturaleza:</b>
+                    </div>
+                    <div class="row">
+                        {%if obj.naturaleza is not null %}
+                            <div style="padding-left:10px;">{{obj.naturaleza.nombre}}</div>
+                        {%endif%}
+                    </div>
+                </div>
+                <div class="col-md-3 text-left">
+                    <div class="row">
+                        <b>Tipo de Proceso:</b>
+                    </div>
+                    <div class="row">
+                        {%if obj.tipoproceso is not null %}
+                        <div style="padding-left:10px;">{{obj.tipoproceso.nombre}}</div>
+                        {%endif%}
+                    </div>
+                </div>
+                <div class="col-md-4 text-left">
+                    <div class="row">
+                        <b>Abogado Principal:</b>
+                    </div>
+                    <div class="row">
+                        {%if obj.abogadoprincipal is not null %}
+                            <div style="padding-left:10px;">{{obj.abogadoprincipal.nombre}}</div>
+                        {%endif%}
+                    </div>
+                </div>
+                <div class="col-md-2 text-left">
+                    <div class="row">
+                        <b>Fecha de Inicio:</b>
+                    </div>
+                    <div class="row">
+                        {%if obj.fechainicio is not null %}
+                            <div style="padding-left:10px;">{{obj.fechainicio|date("d/m/Y")}}</div>
+                        {%endif%}
+                    </div>
+                </div>
+            </div>
+    </div>
+</div>                        

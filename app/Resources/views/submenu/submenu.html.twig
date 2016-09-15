@@ -1,0 +1,20 @@
+{#
+    MODOS DE USO:
+    Redefinir bloques:
+        -Bloque heading: Contiene el titulo del menu
+        -Bloque buttons: Contiene el cuerpo del listado de botones
+#}
+
+<div class="panel panel-primary" style="margin:0;padding:0;background-color: whitesmoke">
+    <div class='panel-heading'>
+        {%block heading %}
+        {% endblock %}
+    </div>
+    <div class='panel-body'>
+        <ul class='nav nav-pills nav-stacked'>
+            {% block buttons %}
+                
+            {% endblock %}    
+        </ul>
+    </div>
+</div>
