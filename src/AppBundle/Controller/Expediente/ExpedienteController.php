@@ -2,21 +2,26 @@
 
 namespace AppBundle\Controller\Expediente;
 
+use ABMBundle\Services\AbmManager;
 use AppBundle\Entity\Expediente;
 use AppBundle\Entity\ExpedienteTipoProceso;
+use AppBundle\Entity\TipoProceso;
+use AppBundle\Exception\CheckPermissionsException;
+use AppBundle\Exception\DeleteException;
+use AppBundle\Exception\ListException;
+use AppBundle\Exception\NewException;
+use AppBundle\Exception\UndoDeleteException;
+use AppBundle\Exception\ValidateException;
+use AppBundle\Form\Type\Expediente\ExpedienteFindType;
+use AppBundle\Form\Type\Expediente\ExpedienteTipoProcesoType;
+use Exception;
 use ListViewBundle\Services\LinkColumn;
 use ListViewBundle\Services\ListView;
-
-use AppBundle\Form\Type\Expediente\ExpedienteFindType;
-
-use AppBundle\Form\Type\Expediente\ExpedienteTipoProcesoType;
-
-use AppBundle\Entity\TipoProceso;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\HttpFoundation\Request;
 
 
     /**
@@ -30,23 +35,34 @@ class ExpedienteController extends Controller
      */
     public function newAction(Request $request)
     {
-        $expedienteManager = $this->get('lp_ExpedienteManager');
-        $form = $expedienteManager->getForm(new Expediente());
-        $form->handleRequest($request);   
-        if($form->isValid()) {
-            $expediente = $expedienteManager->doNew($form->getData());
-            //Presiono el boton de Modificar y Continuar
-            if ($request->request->has('modificar')) {
-                return $this->redirectToRoute('expediente_show', array('id'=>$expediente->getId()), 301);                
-            }else{
-                $this->get('session')->getFlashBag()->add('success', '<a href="' . $this->generateUrl('expediente_show', array('id' => $expediente->getId())) . '">' . $expediente->getNumeroyCaratula() . ' ' . $this->get('translator')->trans('create_ok')  .'</a>');                
-                return $this->redirectToRoute('expediente_list', array(), 301);
-            }               
+        try{
+            $expedienteManager = $this->get('lp_ExpedienteManager');
+            $form = $expedienteManager->getForm(new Expediente(),false, "NEW");
+            $form->handleRequest($request);   
+            if($form->isValid()) {
+                $expediente = $expedienteManager->doNew($form->getData());
+                //Presiono el boton de Modificar y Continuar
+                if ($request->request->has('modificar')) {
+                    return $this->redirectToRoute('expediente_show', array('id'=>$expediente->getId()), 301);                
+                }else{
+                    $this->get('session')->getFlashBag()->add('success', '<a href="' . $this->generateUrl('expediente_show', array('id' => $expediente->getId())) . '">' . $expediente->getNumeroyCaratula() . ' ' . $this->get('translator')->trans('create_ok')  .'</a>');                
+                    return $this->redirectToRoute('expediente_list', array(), 301);
+                }               
+            }
+
+            $abmManager = $this->get('ABM_AbmManager')
+                    ->setTitle($this->get('translator')->trans('title_new')  . ' ')
+                    ->setCancelPath($this->generateUrl('expediente_list', array()))
+                    ->setForm($form->createView())
+                    ->setOperation(AbmManager::abm_ope_new);
+            return array('abmManager' => $abmManager);
+        }catch(ValidateException $exv){
+            
+        }catch(CheckPermissionsException $exp){
+            
+        }catch(NewException $expn){
+            
         }
-        $abmManager = $this->get('ABM_AbmManager')
-                ->setTitle($this->get('translator')->trans('title_new')  . ' ')
-                ->setForm($form->createView());
-        return array('abmManager' => $abmManager);
     }
     
      /**
@@ -55,11 +71,21 @@ class ExpedienteController extends Controller
      */
     public function deleteAction(Expediente $expediente)
     {
-        $expedienteManager = $this->get('lp_ExpedienteManager');
-        $expedienteManager->doCheckPermissions($expediente);
-        $expedienteManager->doDelete($expediente);
-        $this->get('session')->getFlashBag()->add('danger', '<a href="' . $this->generateUrl('expediente_undodelete', array('id' => $expediente->getId())) . '"><span class="glyphicon glyphicon-trash"></span>   ' . $expediente->getNumeroyCaratula() . ' ' . $this->get('translator')->trans('delete_ok')  . '</a>');   
-        return $this->redirectToRoute('expediente_list', array(), 301);
+        try{
+            $expedienteManager = $this->get('lp_ExpedienteManager');
+            $expedienteManager->doCheckPermissions($expediente);
+            $expedienteManager->doDelete($expediente);
+            $this->get('session')->getFlashBag()->add('danger', '<a href="' . $this->generateUrl('expediente_undodelete', array('id' => $expediente->getId())) . '"><span class="glyphicon glyphicon-trash"></span>   ' . $expediente->getNumeroyCaratula() . ' ' . $this->get('translator')->trans('delete_ok')  . '</a>');   
+        }catch(ValidateException $exv){
+            $this->get('session')->getFlashBag()->add('danger', 'El expediente no es valido');
+        }catch(CheckPermissionsException $exp){
+            $this->get('session')->getFlashBag()->add('danger', 'No tiene los permisos para eliminar el expediente');
+        }catch(DeleteException $exd){
+            $this->get('session')->getFlashBag()->add('danger', 'Ha ocurrido un error al eliminar el expediente');
+        } catch (Exception $ex) {
+        }finally{
+            return $this->redirectToRoute('expediente_list', array(), 301);  
+        }
     }    
 
     /**
@@ -68,12 +94,21 @@ class ExpedienteController extends Controller
      */
     public function undodeleteAction(Expediente $expediente)
     {
-        //HACER: chequear si el expediente es del estudio
-        $expedienteManager = $this->get('lp_ExpedienteManager');
-        $expedienteManager->doCheckPermissions($expediente);
-        $expedienteManager->doUndoDelete($expediente);
-        $this->get('session')->getFlashBag()->add('success', '<a href="' . $this->generateUrl('expediente_show', array('id' => $expediente->getId())) . '"><span class="glyphicon glyphicon-eye-open"></span>  ' . $expediente->getNumeroyCaratula() . ' ' . $this->get('translator')->trans('undelete_ok')  . '</a>');   
-        return $this->redirectToRoute('expediente_list', array(), 301);
+        try{
+            $expedienteManager = $this->get('lp_ExpedienteManager');
+            $expedienteManager->doUndoDelete($expediente);
+            $this->get('session')->getFlashBag()->add('success', '<a href="' . $this->generateUrl('expediente_show', array('id' => $expediente->getId())) . '"><span class="glyphicon glyphicon-eye-open"></span>  ' . $expediente->getNumeroyCaratula() . ' ' . $this->get('translator')->trans('undelete_ok')  . '</a>');   
+        }catch(ValidateException $exv){
+            $this->get('session')->getFlashBag()->add('danger', 'El expediente no es valido');
+        }catch(CheckPermissionsException $exp){
+            $this->get('session')->getFlashBag()->add('danger', 'No tiene los permisos para restaurar el expediente');
+        }catch(UndoDeleteException $exud){
+            $this->get('session')->getFlashBag()->add('danger', 'Ha ocurrido un error al restaurar el expediente');
+        } catch (Exception $ex) {
+        }finally{
+            return $this->redirectToRoute('expediente_list', array(), 301);  
+        }
+
     }    
 
     
@@ -150,7 +185,7 @@ class ExpedienteController extends Controller
                 ->setForm($form->createView())
                 ->setMethod('GET')
                 ->setAction($this->generateUrl('expediente_list'));
-
+                
         
         
         
@@ -162,131 +197,36 @@ class ExpedienteController extends Controller
         }
         return array('findManager' => $findManager);
     }
-     /**
-     * @Route("/deleteproceso/{idExpedienteTipoProc}/{id}",defaults={"idExpedienteTipoProc" = -1,"id" =-1}, name="expediente_tipoproceso_delete")
-     */
-    public function tipoProcesoDeleteAction($idExpedienteTipoProc,Expediente $expediente)
-    {
-        if(!$expediente){
-            throw new \Exception('No existe el expediente');
-        }
-        $em = $this->getDoctrine()->getManager();
-        if($idExpedienteTipoProc == "all"){
-            $qb = $em->createQueryBuilder();
-            $qb->delete('AppBundle:ExpedienteTipoProceso', 'e')
-                    ->where('e.Expediente = :expediente')
-                    ->setParameter('expediente', $expediente)
-                    ->getQuery()
-                    ->execute();
-            $this->get('session')->getFlashBag()->add('success', 'Se eliminaron todos los tipos de proceso vinculado al caso');
-        }else{
-            $repository = $em->getRepository('AppBundle:ExpedienteTipoProceso');
-            $tipoproc = $repository->find($idExpedienteTipoProc);
-            if($tipoproc){
-                $em->remove($tipoproc);
-                $em->flush();
-                $this->get('session')->getFlashBag()->add('success', 'Se elimino el tipo de proceso vinculado al caso');
-            }else{
-                $this->get('session')->getFlashBag()->add('danger', 'No se pudo eliminar el proceso');  
-            }
-        }
-        return $this->redirectToRoute('expediente_tipodeproceso_showedit', array('id'=>$expediente->getId()), 301);
-    }
-    
-     /**
-     * @Route("/tipoproceso/edit/{id}/{page}/{resultpage}",defaults={"page" = 1, "resultpage" = 10,"ope"="show"}, name="expediente_tipodeproceso_showedit")
-       @Template("AppBundle:Expediente:Expediente/tipoproceso.html.twig")
-     */
-    public function tipodeProcesoShowEditAction(Request $request,$page,$resultpage,Expediente $expediente)
-    {
-        if(!$expediente){
-            throw new \Exception('No existe el expediente');
-        }
-        $em = $this->getDoctrine()->getManager();
-        $estudio =$this->getUser()->getEstudio();
-        $tipoProcesos = $em->createQueryBuilder()
-            ->select('e')
-            ->where("e.status =:status and (e.Estudio = :estudio or e.esp = 1)")
-            ->setParameters(array("status"=> TipoProceso::STATUS_NO_DELETED, "estudio"=>$estudio))
-            ->from('AppBundle:TipoProceso','e')
-                ->getQuery()->getResult();
-        //Se hace asi cuando hay multiples formularios en la pagina de la misma clase
-        $formPrincipal = $this->get('form.factory')->createNamedBuilder("principal",ExpedienteTipoProcesoType::class,$expediente,array('tipoProcesos'=> $tipoProcesos))->getForm()
-            ->add('submit', SubmitType::class,array('label' => 'Definir'));
-        //Se hace asi cuando hay multiples formularios en la pagina de la misma clase
-        $formSecundario = $this->get('form.factory')->createNamedBuilder("secundario",ExpedienteTipoProcesoType::class,null,array('tipoProcesos'=> $tipoProcesos))->getForm()
-            ->add('submit', SubmitType::class, array('label' => 'Agregar'));
-        $formPrincipal->handleRequest($request);
-        if($formPrincipal->isValid()) {
-            $expediente = $formPrincipal->getData();
-            $em->flush();
-        }
-        $formSecundario->handleRequest($request);
-        if($formSecundario->isValid()) {
-            $tipoProceso = $formSecundario->getData()->getTipoProceso();
-            $repository = $this->getDoctrine()->getRepository('AppBundle:ExpedienteTipoProceso');
-
-            if(!$this->getDoctrine()->getRepository('AppBundle:Expediente')->getEntityTipoProceso($estudio,$expediente,$tipoProceso)){
-                $this->get('session')->getFlashBag()->add('success', 'El tipo de proceso ' . $tipoProceso->getNombre() . ' se asocio al expediente');                                
-                $procesoAsociado = new ExpedienteTipoProceso();
-                $procesoAsociado->setEstudio($estudio)
-                    ->setExpediente($expediente)
-                    ->setTipoProceso($tipoProceso);
-                $em->persist($procesoAsociado);
-                $em->flush();
-            }else{
-                $this->get('session')->getFlashBag()->add('warning', 'El tipo de proceso ya esta asociado al expediente');                                                
-            }
-        }
-        $queryBuilder = $this->getDoctrine()->getRepository('AppBundle:Expediente')->getTipoProcesodeExpediente($estudio,$expediente);
-        $list = new ListView();
-        $list
-            ->setTitle("Tipos de Proceso")
-            ->setControllerParent($this)
-            ->addColumn('', 'id',array(
-                'type' => 'link',
-                'route' => new LinkColumn('expediente_tipoproceso_delete', array('idExpedienteTipoProc'=> 'getId','id'=>'getExpedienteid')),
-                'value' => '<span style="color:red" class="glyphicon glyphicon-trash"></span>',
-            ))          
-            ->addColumn("Otros Procesos Asociados", 'NombreProceso',array(
-                'type' => 'string',
-                'allow_order'=>'0',
-                ))
-            ->setPage($page)
-            ->setResultPage($resultpage)
-            ->setQueryBuilder($queryBuilder)
-            ->setOrderCol("", "");
-        return array(
-                    "request" => $request, 
-                    "list" => $list, 
-                    "formPrincipal" => $formPrincipal->createView(), 
-                    "formSecundario" => $formSecundario->createView(), 
-                    "expediente"=>$expediente, 
-                    "section"=>"TipodeProceso"
-                );
-    }
+     
      /**
      * @Route("/edit/{id}", name="expediente_edit")
-     * Route("/edit/{id}/{seccion}", name="expediente_edit")
+     * Route("/edit/{id}/{seccion}",defaults={"seccion"="General"}, name="expediente_edit")
      * @Template()
      */
-    public function editAction(Request $request,Expediente $expediente)
+    public function editAction(Request $request,Expediente $expediente, $seccion= "General")
     {
-        $expedienteManager = $this->get('lp_ExpedienteManager');
-        $expedienteManager->doCheckPermissions($expediente);
-        $form = $expedienteManager->getForm($expediente);
-        $form->handleRequest($request);
-        if($form->isValid()) {
-            $expediente = $expedienteManager->doEdit($form->getData());
-            return $this->redirectToRoute('expediente_show', array('id'=>$expediente->getId()), 301);
+        try{
+            $expedienteManager = $this->get('lp_ExpedienteManager');
+            $expedienteManager->doCheckPermissions($expediente);
+            $form = $expedienteManager->getForm($expediente,false,$seccion);
+            $form->handleRequest($request);
+            if($form->isValid()) {
+                $expediente = $expedienteManager->doEdit($form->getData());
+                return $this->redirectToRoute('expediente_show', array('id'=>$expediente->getId()), 301);
+            }
+            $abmManager = $this->get('ABM_AbmManager')
+                    ->setTitle($expediente->getNumeroCompleto())
+                    ->setForm($form->createView())
+                    ->setCancelPath($this->generateUrl('expediente_show', array('id' => $expediente->getId())))
+                    ->setOperation(AbmManager::abm_ope_modify);
+            return array('abmManager' => $abmManager , 'expediente'=>$expediente, 'section'=>'General');
+        }catch(ValidateException $exv){
+            
+        }catch(CheckPermissionsException $exp){
+            
+        } catch (Exception $ex) {
+
         }
-        $abmManager = $this->get('ABM_AbmManager')
-                ->setTitle($expediente->getNumeroCompleto())
-                ->setForm($form->createView())
-                ->setCancelPath($this->generateUrl('expediente_show', array('id' => $expediente->getId())));
-        
-        return array('abmManager' => $abmManager , 'expediente'=>$expediente, 'section'=>'General');
-//        return array('form' => $form->createView(), 'titulo'=>$titulo,'subtitulo' => $subtitulo, 'expediente'=> $expediente, 'seccion'=> 'General');
     }
 
     
@@ -295,19 +235,24 @@ class ExpedienteController extends Controller
      * Route("/show/{id}/{seccion}",defaults={"seccion"="General"}, name="expediente_show")
      * @Template()
      */
-    public function showAction(Expediente $expediente)
+    public function showAction(Expediente $expediente,$seccion="General")
     {
-        if(!$expediente || $expediente->getStatus() == Expediente::STATUS_DELETED){
-            throw new \Exception('No existe el expediente');
+        try{
+            $expedienteManager = $this->get('lp_ExpedienteManager');
+            $expedienteManager->doCheckPermissions($expediente);        
+            $form = $expedienteManager->getForm($expediente, true,$seccion);
+            $abmManager = $this->get('ABM_AbmManager')
+                ->setTitle($expediente->getNumeroCompleto())
+                ->setEditPath($this->generateUrl('expediente_edit', array('id'=> $expediente->getId())))
+                ->setCancelPath($this->generateUrl('expediente_list', array()))
+                ->setOperation(AbmManager::abm_ope_show)
+                ->setForm($form->createView());
+            return array('abmManager' => $abmManager, 'expediente'=>$expediente, 'section'=>'General');
+        }catch(ValidateException $exv){
+            throw new Exception ("Error en Validate: " . $exv->getMessage(), 404,$exv);
+        }catch(CheckPermissionsException $exp){
+            throw new Exception ("Error en los permisos: " . $exp->getMessage(), 404,$exp);
         }
-        $expedienteManager = $this->get('lp_ExpedienteManager');
-        $expedienteManager->doCheckPermissions($expediente);        
-        $form = $expedienteManager->getForm($expediente, true);
-        $abmManager = $this->get('ABM_AbmManager')
-            ->setTitle($expediente->getNumeroCompleto())
-            ->setForm($form->createView())
-            ->setEditPath($this->generateUrl('expediente_edit', array('id'=> $expediente->getId())));
-        return array('abmManager' => $abmManager, 'expediente'=>$expediente, 'section'=>'General');
     }
     
     /**
@@ -316,9 +261,15 @@ class ExpedienteController extends Controller
      */
     public function listAction(Request $request, $page,$resultpage,$order_col,$order_status)
     {
-        $expedienteManager = $this->get('lp_ExpedienteManager');
-        $list = $expedienteManager->getList($order_col, $order_status, $page, $resultpage);
-        return array('list' => $list,'request'=>$request,'parameters'=>$this->getRequest()->query->all());
+        try{
+            $expedienteManager = $this->get('lp_ExpedienteManager');
+            $list = $expedienteManager->getList($order_col, $order_status, $page, $resultpage);
+            return array('list' => $list,'request'=>$request,'parameters'=>$this->getRequest()->query->all());
+        }catch(ListException $exl){
+            
+        } catch (Exception $ex) {
+
+        }
     }    
     /**
      * @Route("/showwidget" , name="expediente_showwidget")

@@ -1,0 +1,12 @@
+{% extends 'ABMBundle::new.html.twig' %}
+{% block aside_breadcrumb %}
+    {% set breadcrumb = knp_menu_get('AppBundle:BreadcrumbBuilder:expedienteShowMenu', [],{'expediente' : expediente} ) %}
+    {{ knp_menu_render(breadcrumb, {'allow_safe_labels': true} ) }}{% endblock %}
+{% block aside_left %}
+    {{ include('AppBundle:Expediente:submenu/sm_general.html.twig') }}
+    <br>
+    {{ include('AppBundle:Expediente:submenu/vinculado/sm_new.html.twig') }}
+{% endblock %}
+{% block body_top %}
+    {#{% render (controller("CommonBundle:Submenu:NAVexpedienteIntervinientelist", {'expediente': expediente, 'seccion': seccion, 'route':app.request.attributes.get('_route'),'route_params':app.request.attributes.get('_route_params')}))%}#}
+{% endblock %}

@@ -25,25 +25,27 @@ class ExpedienteType extends AbstractType
             ->add('numero',NumberType::class,array('required'=> true,'label'=>'Número de Expediente','max_length'=> '9'))
             ->add('anio',NumberType::class,array('required'=> true,'label'=>'Año','max_length'=> '4'))
             ->add('nroincidente',NumberType::class,array('required'=> false,'label'=>'Nro. de Incidente','max_length'=> '4'))
-            ->add('fechainicio',  DateType::class,array('required'=> false,'label'=>'Fecha de Inicio','format' => 'dd-MM-yyyy','widget'=>'text'))
+            
 
+            ->add('ClientePrincipal', EntityType::class, array(
+                    'class' => 'AppBundle:Entidad',    
+                    'choice_label' => 'nombre','mapped' => true, 
+                    'label'=> 'Cliente Principal',
+                    'choices'=> $options['clientes']
+            ))   
             //CAMARA DEL EXPEDIENTE: ÚNICA PARA TODOS LOS ESTUDIOS
             ->add('ExpedienteCamara', EntityType::class, array(
                     'class' => 'AppBundle:ExpedienteCamara',    
                     'choice_label' => 'nombreCompleto','mapped' => true, 'label'=> 'Cámara'
             ))                
-            //NATURALEZA
-            ->add('Naturaleza', EntityType::class, array(
-                    'class' => 'AppBundle:ExpedienteNaturaleza',
-                    'choice_label' => 'nombre','mapped' => true, 'label'=> 'Naturaleza'
-            ))                  
         ;
     }
     
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => 'AppBundle\Entity\Expediente'
+            'data_class' => 'AppBundle\Entity\Expediente',
+            'clientes' => null
         ));
     }
 }

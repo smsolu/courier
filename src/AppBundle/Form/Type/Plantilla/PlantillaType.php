@@ -26,16 +26,18 @@ class PlantillaType extends AbstractType
                                                                     'Carpeta' => 0
                                                                     ), 
                                                     'label' => 'Tipo',
-                                                    'choices_as_values' => true,))
-                
-            ->add('file', FileType::class, array('label' => 'Archivo', 'required'=> $options['fileRequired'] ));
+                                                    'choices_as_values' => true,));
+        if($options['fileEnabled']){
+            $builder->add('file', FileType::class, array('label' => 'Archivo', 'required'=> $options['fileRequired'] ));
+        }
     }
     
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(array(
             'data_class' => 'AppBundle\Entity\Plantilla',
-            'fileRequired' => true
+            'fileRequired' => true,
+            'fileEnabled' => true
         ));
     }
 }

@@ -4,7 +4,8 @@
     {{ knp_menu_render(breadcrumb, {'allow_safe_labels': true} ) }}
 {% endblock %}
 {% block aside_left %}
-    {{ include('AppBundle:Expediente:submenu/sm_general.html.twig') }}
+    {{ include('AppBundle:Expediente:submenu/sm_general.html.twig') }}<br>
+    {{ include('AppBundle:Expediente:submenu/sm_expediente_edit.html.twig',{'buttons': abmManager.getButtons()}) }}
 {% endblock %}
 {% block body_top %}
     {{ include('AppBundle:Expediente:cabecera.html.twig') }}

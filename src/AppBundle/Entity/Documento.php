@@ -67,6 +67,13 @@ class Documento extends LP_Entity
      */
     private $fechaModificacion;
     /**
+     * @var date
+     *
+     * @ORM\Column(name="fecha_eliminacion", type="datetime", nullable=true)
+     */
+    private $fechaEliminacion;
+    
+    /**
      * @var \Expediente
      *
      * @ORM\ManyToOne(targetEntity="Expediente")
@@ -486,6 +493,14 @@ class Documento extends LP_Entity
         }
     }
     
+    function getFechaEliminacion() {
+        return $this->fechaEliminacion;
+    }
+
+    function setFechaEliminacion($fechaEliminacion) {
+        $this->fechaEliminacion = $fechaEliminacion;
+    }
+
 
 
 

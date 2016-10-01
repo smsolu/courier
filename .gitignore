@@ -1,3 +1,6 @@
-/nbproject/private/
-/vendor/
 cache
+logs
+/app/config/parameters.yml
+vendor
+nbproject
+data

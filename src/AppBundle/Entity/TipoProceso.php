@@ -2,8 +2,8 @@
 
 namespace AppBundle\Entity;
 
-use Doctrine\ORM\Mapping as ORM;
 use AppBundle\Entity\LP_Entity;
+use Doctrine\ORM\Mapping as ORM;
 /**
  * EntidadEmpresa
  *
@@ -199,10 +199,10 @@ class TipoProceso extends LP_Entity
     /**
      * Set Estudio
      *
-     * @param \AppBundle\Entity\Estudio $estudio
+     * @param Estudio $estudio
      * @return this
      */
-    public function setEstudio(\AppBundle\Entity\Estudio $estudio = null)
+    public function setEstudio(Estudio $estudio = null)
     {
         $this->Estudio = $estudio;
 
@@ -212,7 +212,7 @@ class TipoProceso extends LP_Entity
     /**
      * Get Estudio
      *
-     * @return \AppBundle\Entity\Estudio
+     * @return Estudio
      */
     public function getEstudio()
     {

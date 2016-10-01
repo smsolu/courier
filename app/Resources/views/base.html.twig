@@ -8,42 +8,7 @@
             <link rel="stylesheet" href="{{ asset('https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css') }}"/>              <!-- Importación del framework css -->
             <link rel="stylesheet" href="{{ asset('https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap-theme.min.css') }}"/> <!-- importación del tema css (Esto es opcional) -->
             <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/2.4.0/fullcalendar.min.css"/>            
-            <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
             <meta name="viewport" content="width=device-width, initial-scale=1"/>
-            
-            <style>
-            .material-icons {
-                font-family: 'Material Icons';
-                font-weight: normal;
-                font-style: normal;
-                font-size: 24px;  /* Preferred icon size */
-                display: inline-block;
-                line-height: 1;
-                text-transform: none;
-                letter-spacing: normal;
-                word-wrap: normal;
-                white-space: nowrap;
-                direction: ltr;
-
-                /* Support for all WebKit browsers. */
-                -webkit-font-smoothing: antialiased;
-                /* Support for Safari and Chrome. */
-                text-rendering: optimizeLegibility;
-
-                /* Support for Firefox. */
-                -moz-osx-font-smoothing: grayscale;
-
-                /* Support for IE. */
-                font-feature-settings: 'liga';
-              }
-            .material-icons.md-18 { font-size: 18px; }
-            .material-icons.md-24 { font-size: 24px; }
-            .material-icons.md-36 { font-size: 36px; }
-            .material-icons.md-48 { font-size: 48px; }
-            .material-icons.md-64 { font-size: 64px; } 
-            </style>            
-
-            
         {% endblock %}
     </head>
     <body>        
@@ -53,7 +18,7 @@
 
 
         {# ESPACIO PARA DEJAR FIJO EL TITULO       #}
-        <div style="height: 70px;"> 
+        <div style="height: 55px;"> 
         </div>
  
         <aside class='container-fluid col-lg-12'>
@@ -90,13 +55,15 @@
             <script src="{{ asset('http://code.jquery.com/jquery.js') }}"></script>
             <script src="{{ asset('https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js') }}"></script> <!-- Importación del framework en js -->
         
-
+{#      CALENDARIO#}
+{#        <script src="http://code.jquery.com/jquery.js"></script>#}
         <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.6/moment.min.js"></script> 
         <script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/2.4.0/fullcalendar.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/2.4.0/lang/es.js"></script> 
         
         {% endblock %}
     
+{#          </div>          #}
 
     </body>
 </html>

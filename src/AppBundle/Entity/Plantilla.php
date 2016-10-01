@@ -3,6 +3,7 @@
 namespace AppBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use AppBundle\Entity\LP_Entity;
+
 /**
  * Plantilla
  *
@@ -97,7 +98,28 @@ class Plantilla extends LP_Entity
      * @ORM\Column(name="codigo", type="string", length=1024, nullable=true)
      */   
     private $codigo;
+    
+//    fecha_creacion, fecha_modificacion, fecha_eliminacion
+    /**
+     * @var datetime
+     *
+     * @ORM\Column(name="fecha_creacion", type="datetime", nullable=true)
+     */
+    private $fechaCreacion;
+    /**
+     * @var datetime
+     *
+     * @ORM\Column(name="fecha_modificacion", type="datetime", nullable=true)
+     */
+    private $fechaModificacion;
+    /**
+     * @var datetime
+     *
+     * @ORM\Column(name="fecha_eliminacion", type="datetime", nullable=true)
+     */
+    private $fechaEliminacion;
 
+    
     private $file;
     /**
      * Set nombre
@@ -108,7 +130,6 @@ class Plantilla extends LP_Entity
     public function setNombre($nombre)
     {
         $this->nombre = $nombre;
-
         return $this;
     }
 
@@ -172,7 +193,6 @@ class Plantilla extends LP_Entity
     public function setEstudio(\AppBundle\Entity\Estudio $Estudio = null)
     {
         $this->Estudio = $Estudio;
-
         return $this;
     }
     
@@ -196,7 +216,6 @@ class Plantilla extends LP_Entity
     public function setFilename($filename)
     {
         $this->filename = $filename;
-
         return $this;
     }
 
@@ -219,7 +238,6 @@ class Plantilla extends LP_Entity
     public function setDescripcion($descripcion)
     {
         $this->descripcion = $descripcion;
-
         return $this;
     }
 
@@ -242,7 +260,6 @@ class Plantilla extends LP_Entity
     public function setStatus($status)
     {
         $this->status = $status;
-
         return $this;
     }
 
@@ -265,7 +282,6 @@ class Plantilla extends LP_Entity
     public function setTipo($tipo)
     {
         $this->tipo = $tipo;
-
         return $this;
     }
 
@@ -325,6 +341,7 @@ class Plantilla extends LP_Entity
         $this->filename = $file->getFilename();
         $this->filesize = filesize($file->getPathname());
         $this->file = $file;
+        return $this;
     }
     
     function getCodigo() {
@@ -333,6 +350,31 @@ class Plantilla extends LP_Entity
 
     function setCodigo($codigo) {
         $this->codigo = $codigo;
+        return $this;
+    }
+
+    function getFechaCreacion() {
+        return $this->fechaCreacion;
+    }
+
+    function getFechaModificacion() {
+        return $this->fechaModificacion;
+    }
+
+    function getFechaEliminacion() {
+        return $this->fechaEliminacion;
+    }
+
+    function setFechaCreacion(\DateTime $fechaCreacion) {
+        $this->fechaCreacion = $fechaCreacion;
+    }
+
+    function setFechaModificacion(\DateTime $fechaModificacion) {
+        $this->fechaModificacion = $fechaModificacion;
+    }
+
+    function setFechaEliminacion(\DateTime $fechaEliminacion) {
+        $this->fechaEliminacion = $fechaEliminacion;
     }
 
 

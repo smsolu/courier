@@ -2,15 +2,17 @@
 
 namespace AppBundle\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use AppBundle\Entity\Expediente;
+use AppBundle\Entity\Plantilla;
+use AppBundle\Exception\CheckPermissionsException;
+use AppBundle\Exception\DeleteException;
+use AppBundle\Exception\EditException;
+use AppBundle\Exception\NewException;
+use AppBundle\Exception\UndoDeleteException;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
-use ListViewBundle\Services\LinkColumn;
-use ListViewBundle\Services\ListView;
-use AppBundle\Form\Type\Plantilla\PlantillaType;
-use AppBundle\Entity\Plantilla;
-use AppBundle\Entity\Expediente;
 //use PhpOffice\PhpWord\TemplateProcessor;
 
     /**
@@ -19,133 +21,71 @@ use AppBundle\Entity\Expediente;
 class PlantillaController extends Controller
 {
     /**
-     * @Route("/list/{id_folder}/{page}/{resultpage}/{order_col}/{order_status}", defaults={"id_folder"=0, "page" = 1, "resultpage" = 10,"order_col"="tipo","order_status"=1}, name="plantilla_list")
+     * @Route("/list/{id}/{page}/{resultpage}/{order_col}/{order_status}", defaults={"id"=0 ,"page" = 1, "resultpage" = 10,"order_col"="tipo","order_status"=1}, name="plantilla_list")
      * @Template()
      */
-    public function listAction(Request $request, $id_folder,$page,$resultpage,$order_col,$order_status)
+    public function listAction(Request $request,$page,$resultpage,$order_col,$order_status, Plantilla $folder = null)
     {
-        $estudio = $this->getUser()->getEstudio();
-        $em = $this->getDoctrine()->getManager();
-      
-        $queryBuilder = $em->getRepository("AppBundle:Plantilla")->getPlantillas($estudio);
-        $queryBuilder->OrderBy("e.tipo", "ASC");
-//        $queryBuilder = $em->createQueryBuilder();
-//        $queryBuilder
-//            ->select('e')
-//            ->where("e.status =:status and e.Estudio =:estudio")
-//            ->setParameters(array("status"=> 0, "estudio" => $estudio))
-//            ->from('AppBundle:Plantilla','e')
-//            ->OrderBy("e.tipo", "ASC");
-
-        if($id_folder != 0){
-            $plantilla = $this->getDoctrine()
-                ->getRepository('AppBundle:Plantilla')
-                ->find($id_folder);
-            if(!$plantilla){
-                throw new \Exception('No existe la plantilla padre');
-            }
-            $queryBuilder->andWhere("e.plantillaPadre =:plantillaPadre")
-                         ->setParameter("plantillaPadre", $plantilla);
-        }else{
-            $queryBuilder->andWhere("e.plantillaPadre is NULL");
+        try{
+            $templateManager = $this->get('lp_TemplateManager');
+            $templateManager->doCheckPermissions();
+            $list = $templateManager->getList($folder,$order_col, $order_status, $page, $resultpage);
+            return array('list' => $list,'request'=>$request);
+        }catch(CheckPermissionsException $e){
+            //Hacer: QUe vaya a la pantalla main o a un ade error
+            throw $e;
         }
-        //3. Generar el ListView con las columnas a mostrar
-        $list = new ListView();
-        $list
-            ->setTitle("Plantillas")
-            ->setControllerParent($this)
-            ->addColumn('', 'id',array(
-                'type' => 'link',
-                'route' => new LinkColumn('plantilla_show', array('id'=> 'getId')),
-                'value' => '<span class="glyphicon glyphicon-file"></span>'
-                )
-            )
-//            ->addColumn('', 'id',array(
-//                'type' => 'link',
-//                'route' => new LinkColumn('plantilla_newDocument', array('id'=> 'getId')),
-//                'value' => '<span class="glyphicon glyphicon-save-file"></span>'
-//                )
-//            )
-            ->addColumn("Nombre", 'nombre',array(
-                'type' => 'string',
-
-                ))                
-            ->addColumn("Descripcion", 'descripcion',array(
-                'type' => 'string',
-                
-                ))
-            ->setPage($page)
-            ->setResultPage($resultpage)
-            ->setQueryBuilder($queryBuilder)
-            ->setOrderCol($order_col, $order_status);        
-        
-        //. Enviar la información a la vista
-        return array('list' => $list,'request'=>$request);
     }
     /**
-     * @Route("/edit/{id}/{section}",defaults={"section"="General"}, name="plantilla_edit")
+     * @Route("/edit/{id}", name="plantilla_edit")
      * @Template()
      */
-    public function editAction(Request $request,Plantilla $plantilla,$section)
+    public function editAction(Request $request,Plantilla $plantilla)
     {
-        //HACER: cuando cambio el archivo debo borrar el viejo
-        $em = $this->getDoctrine()->getManager();
-        if($plantilla->getStatus() != Plantilla::STATUS_NO_DELETED){
-            throw new Exception('No existe la plantilla');
-        }
-
-        $form = $this->createForm(PlantillaType::class, $plantilla, array('fileRequired' => false)); 
-        $form->handleRequest($request);
-
-        if($form->isValid()) {
-            $plantilla = $form->getData();
-            
-            if($plantilla->getFile() != null){
-                $fsm = $this->get('lp_FilesystemManager');
-                $plantilla->setFilename($fsm->writeTemplate($plantilla->getFile()));
+        try{
+            $templateManager = $this->get('lp_TemplateManager');
+            $templateManager->doCheckPermissions($plantilla);
+            $form = $templateManager->getForm($plantilla,false,array('fileRequired'=>false));
+            $form->handleRequest($request);
+            if($form->isValid()) {
+                $plantilla = $templateManager->doEdit($form->getData());
+                $this->get('session')->getFlashBag()->add('success', "La plantilla ".$this->get('translator')->trans('edit_ok') );
+                return $this->redirectToRoute('plantilla_show', array('id'=>$plantilla->getId()), 301);
             }
-            
-            $em->persist($plantilla);
-            try{
-                $em->flush();
-            } catch (Exception $e) {
-                $fsm->delete($plantilla->getFilename());
-                throw $e;
-            }
-            
-            $this->get('session')->getFlashBag()->add('success', $this->get('translator')->trans('save_ok') );
-            return $this->redirectToRoute('plantilla_show', array('id'=>$plantilla->getId(), 'section'=>$section), 301);
+            $cancelPath = $this->generateUrl('plantilla_show', array('id' => $plantilla->getid()));        
+            $abmManager = $this->get('ABM_AbmManager')
+                    ->setForm($form->createView())
+                    ->setCancelPath($cancelPath);
+            return array('abmManager' => $abmManager , 'plantilla'=>$plantilla);
+        }catch(CheckPermissionsExcepton $e){
+            $this->get('session')->getFlashBag()->add('danger', 'Plantilla invalida');
+            return $this->redirectToRoute('plantilla_list', array(),301);
+        }catch(EditException $e){
+            $this->get('session')->getFlashBag()->add('danger', 'La plantilla '.$this->get('translator')->trans('edit_error'));
+            return $this->redirectToRoute('plantilla_show', array('id'=>$plantilla->getId()), 301);
         }
-        $cancelPath = $this->generateUrl('plantilla_show', array('id' => $plantilla->getid(), 'section' => $section));        
-        $abmManager = $this->get('ABM_AbmManager')
-                ->setForm($form->createView())
-                ->setCancelPath($cancelPath);
-        
-        return array('abmManager' => $abmManager , 'plantilla'=>$plantilla, 'section'=>$section);
     }
     /**
-     * @Route("/show/{id}/{section}",defaults={"section"="General"}, name="plantilla_show")
+     * @Route("/show/{id}", name="plantilla_show")
      * @Template()
      */
-    public function showAction($id,$section)
+    public function showAction(Plantilla $plantilla)
     {
-        $repository = $this->getDoctrine()->getRepository('AppBundle:Plantilla');
-        $plantilla = $repository->find($id);
-
-        if(!$plantilla){
-            throw new Exception('No existe la plantilla');
+        try{
+            $templateManager = $this->get('lp_TemplateManager');
+            $templateManager->doCheckPermissions($plantilla);
+            $form = $templateManager->getForm($plantilla,true,array('fileEnabled'=>false));
+            $cancelPath = $this->generateUrl('plantilla_show', array('id' => $plantilla->getid()));
+            $editPath = $this->generateUrl('plantilla_edit', array('id' => $plantilla->getid()));
+            $abmManager = $this->get('ABM_AbmManager')
+                    ->setForm($form->createView())
+                    ->setCancelPath($cancelPath)
+                    ->setEditPath($editPath);
+            return array('abmManager' => $abmManager);
+        }catch(CheckPermissionsException $e){
+            $this->get('session')->getFlashBag()->add('danger', 'Plantilla invalida');
+            return $this->redirectToRoute('plantilla_list', array(),301);
         }
-        $form = $this->createForm(PlantillaType::class, $plantilla,array('disabled' => true));//($plantillaform,$plantilla,array('disabled' => true));
-        $form->remove('file');
-        $cancelPath = $this->generateUrl('plantilla_show', array('id' => $plantilla->getid(), 'section' => $section));
-        $editPath = $this->generateUrl('plantilla_edit', array('id' => $plantilla->getid(), 'section' => $section));
-        $abmManager = $this->get('ABM_AbmManager')
-                ->setForm($form->createView())
-                ->setCancelPath($cancelPath)
-                ->setEditPath($editPath);
-        
-        return array('abmManager' => $abmManager, 'section'=>$section);
-
     }
     /**
      * @Route("/new", name="plantilla_new")
@@ -153,36 +93,76 @@ class PlantillaController extends Controller
      */
     public function newAction(Request $request)
     {
-//        $em = $this->getDoctrine()->getManager();
-        $user = $this->getUser();
-        $estudio =$user->getEstudio();
-
-        $form = $this->createForm(PlantillaType::class, new Plantilla()); 
-        
-        $form->handleRequest($request);
-        if($form->isValid()) {
-            
-            $plantilla = $form->getData();
-            $plantilla->setEstudio($estudio);
-            
-            $tm = $this->get('lp_TemplateManager');
-            $tm->newTemplate($plantilla);
-
-            //Presiono el boton de Modificar y Continuar
-            if ($request->request->has('modificar')) {
-                return $this->redirectToRoute('plantilla_show', array('id'=>$plantilla->getId()), 301);
-            }else{
-                $this->get('session')->getFlashBag()->add('success', '<a href="' . $this->generateUrl('plantilla_show', array('id' => $plantilla->getId())) . '">' . $plantilla->getNombre() . ' ' . $this->get('translator')->trans('create_ok')  .'</a>');                
-                return $this->redirectToRoute('plantilla_list', array(), 301);
+        try{
+            $templateManager = $this->get('lp_TemplateManager');
+            $templateManager->doCheckPermissions();
+            $form = $templateManager->getForm(new Plantilla());
+            $form->handleRequest($request);   
+            if($form->isValid()) {
+                $plantilla = $templateManager->doNew($form->getData());
+                if ($request->request->has('modificar')) {
+                    return $this->redirectToRoute('plantilla_show', array('id'=>$plantilla->getId()), 301);
+                }else{
+                    $this->get('session')->getFlashBag()->add('success', '<a href="' . $this->generateUrl('plantilla_show', array('id' => $plantilla->getId())) . '">' . $plantilla->getNombre() . ' ' . $this->get('translator')->trans('create_ok')  .'</a>');                
+                    return $this->redirectToRoute('plantilla_list', array(), 301);
+                }
             }
+            $cancelPath = $this->generateUrl('plantilla_list', array());
+            $abmManager = $this->get('ABM_AbmManager')
+                ->setForm($form->createView())
+                ->setCancelPath($cancelPath)
+                ->setShowButtonModify(false);
+            return array('abmManager' => $abmManager);
+        
+        }catch(CheckPermissionsExcepton $e){
+            $this->get('session')->getFlashBag()->add('danger', 'No tiene permisos para esa operacion');
+            return $this->redirectToRoute('plantilla_list', array(),301);    
+        }catch(NewException $e){
+            $this->get('session')->getFlashBag()->add('danger', 'La plantilla '.$this->get('translator')->trans('create_error'));                
+            return $this->redirectToRoute('plantilla_list', array(), 301);
         }
-        $cancelPath = $this->generateUrl('plantilla_list', array());
-        $abmManager = $this->get('ABM_AbmManager')
-//            ->setTitle($this->get('translator')->trans('new') . ' Plantilla')
-            ->setForm($form->createView())
-            ->setCancelPath($cancelPath);
-        return array('abmManager' => $abmManager);
     }
+    /**
+     * @Route("/delete/{id}", name="plantilla_delete")
+     * @Template()
+     */
+    public function deleteAction(Plantilla $plantilla){
+        try{
+            $templateManager = $this->get('lp_TemplateManager');
+            $templateManager->doCheckPermissions($plantilla)
+                            ->doDelete($plantilla);
+            $this->get('session')->getFlashBag()->add('success', '<a href="'.$this->generateUrl('plantilla_undodelete', array('id' => $plantilla->getId())).'">'.'La plantilla '.$plantilla->getNombre()." ".$this->get('translator')->trans('eliminado_ok')  .'</a>');                
+            return $this->redirectToRoute('plantilla_list', array(), 301);
+        }catch(CheckPermissionsExcepton $e){
+            $this->get('session')->getFlashBag()->add('danger', 'No tiene permisos para esa operacion');
+            return $this->redirectToRoute('plantilla_list', array(),301);    
+        }catch(DeleteException $e){
+            $this->get('session')->getFlashBag()->add('danger', 'la plantilla '.$this->get('translator')->trans('eliminado_error'));                
+            return $this->redirectToRoute('plantilla_list', array(), 301);
+        }
+    }
+    /**
+     * @Route("/undodelete/{id}", name="plantilla_undodelete")
+     * @Template()
+     */
+    public function undoDeleteAction(Plantilla $plantilla){
+        try{
+            $templateManager = $this->get('lp_TemplateManager');
+            $templateManager->doCheckPermissions($plantilla, $templateManager::DO_UNDODELETE)
+                            ->doUndoDelete($plantilla);
+            $this->get('session')->getFlashBag()->add('success', '<a href="'.$this->generateUrl('plantilla_show', array('id' => $plantilla->getId())).'">'.'La plantilla '.$plantilla->getNombre()." ".$this->get('translator')->trans('undelete_ok')  .'</a>');                
+            return $this->redirectToRoute('plantilla_list', array(), 301);    
+        }catch(CheckPermissionsExcepton $e){
+            $this->get('session')->getFlashBag()->add('danger', 'No tiene permisos para esa operacion');
+            return $this->redirectToRoute('plantilla_list', array(),301);    
+        }catch(UndoDeleteException $e){
+            $this->get('session')->getFlashBag()->add('danger', 'la plantilla '.$this->get('translator')->trans('undelete_error'));                
+            return $this->redirectToRoute('plantilla_list', array(), 301);
+        }
+    }
+    
+    
+    
     //Provisorio
     /**
      * @Route("/newDocument/{id_plantilla}/{id}", name="plantilla_newDocument")

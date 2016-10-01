@@ -112,7 +112,7 @@ class BreadcrumbBuilder extends ContainerAware{
         $menu = $this->$func($factory, $options);
         $menu->addChild('clientes', array(
             'route' => 'entidad_list',
-            'routeParameters' => array('tipo' => 'cliente'),
+            'routeParameters' => array('codigoTipoEntidad' => 'cliente'),
             'label' => 'Clientes'
         ));
         
@@ -123,7 +123,7 @@ class BreadcrumbBuilder extends ContainerAware{
         $menu = $this->$func($factory, $options);
         $menu->addChild('entidadList', array(
             'route' => 'entidad_list',
-            'routeParameters' => array('tipo' => $options['tipoEntidad']->getCodigo()),
+            'routeParameters' => array('codigoTipoEntidad' => $options['tipoEntidad']->getCodigo()),
             'label' => $options['tipoEntidad']->getNombre()
         ));
         

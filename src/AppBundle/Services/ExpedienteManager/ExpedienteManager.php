@@ -1,14 +1,21 @@
 <?php
 namespace AppBundle\Services\ExpedienteManager;
 
-
-use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorage;
 use AppBundle\Entity\Expediente;
+use AppBundle\Exception\EstudioInvalidoException;
+use AppBundle\Exception\ListException;
+use AppBundle\Exception\NewException;
+use AppBundle\Exception\NoExisteEntidadException;
+use AppBundle\Form\Type\Expediente\ExpedienteGeneralType;
+use AppBundle\Form\Type\Expediente\ExpedienteType;
+use AppBundle\Services\Manager;
+use DateTime;
+use Exception;
 use ListViewBundle\Services\LinkColumn;
 use ListViewBundle\Services\ListView;
-use AppBundle\Form\Type\Expediente\ExpedienteType;
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorage;
 
-class ExpedienteManager {
+class ExpedienteManager extends Manager{
     
     private $estudio;
     private $user;
@@ -23,52 +30,76 @@ class ExpedienteManager {
     }
     //HACER: aplicar filtros para los search list
     public function getList($order_col, $order_status, $page = 1, $resultpage= 10, $filtro = array()){
-        $queryBuilder = $this->em->createQueryBuilder();
-        $queryBuilder
-            ->select('e')
-            ->where("e.status =:status and e.idEstudio = :id_estudio")
-//                 HACER:Agregar una clase para poner constantes generales onda status en todas las entities
-            ->setParameters(array("status"=> Expediente::STATUS_NO_DELETED, "id_estudio"=>$this->estudio))
-            ->from('AppBundle:Expediente_v','e');
-//      HACER: invocar desde service y no con new
-        $list = new ListView();
-        $list
-            ->setTitle("Expedientes")
-//            HACER: esto se setea para el translator, inyectarlo desde el service
-//            ->setControllerParent($this)
-            ->addColumn('', 'id',array(
-                        'type' => 'link',
-//                      HACER: invocar desde service y no desde new
-                        'route' => new LinkColumn('expediente_show', array('id'=> 'getId')),
-                        'value' => '<span class="glyphicon glyphicon-pencil"></span>'
-                        )
-            )
-            ->addColumn('Expediente', 'identificador',array(
-                'type' => 'string',
-                'allow_order'=>'1',
-                ))
-            ->addColumn("Caratula", 'caratula',array(
-                'type' => 'string',
-                'allow_order'=>'1',
-                ))
-            ->addColumn('Cámara', 'camaranombre',array(
-                'type' => 'string',
-                ))
-            ->setPage($page)
-            ->setResultPage($resultpage)
-            ->setQueryBuilder($queryBuilder)
-            ->setOrderCol($order_col, $order_status);
-        return $list;
+        try{
+            
+            $queryBuilder = $this->em->getRepository("AppBundle:Expediente")
+                            ->getExpedienteList($this->estudio,Expediente::STATUS_NO_DELETED);
+            $list = new ListView();
+            $list
+                ->setTitle("Expedientes")
+                ->addColumn('', 'id',array(
+                            'type' => 'link',
+                            'route' => new LinkColumn('expediente_show', array('id'=> 'getId')),
+                            'value' => '<span class="glyphicon glyphicon-pencil"></span>'
+                            )
+                )
+                ->addColumn('Expediente', 'identificador',array(
+                    'type' => 'string',
+                    'allow_order'=>'1',
+                    ))
+                ->addColumn("Caratula", 'caratula',array(
+                    'type' => 'string',
+                    'allow_order'=>'1',
+                    ))
+                ->addColumn('Cámara', 'camaranombre',array(
+                    'type' => 'string',
+                    ))
+                ->setPage($page)
+                ->setResultPage($resultpage)
+                ->setQueryBuilder($queryBuilder)
+                ->setOrderCol($order_col, $order_status);
+            return $list;
+        }catch(Exception $ex){
+            throw new ListException($ex->getMessage(), 404, $ex);
+        }
     }
-    public function getForm($expediente, $disabled = false){
-        return $this->formFactory->create(ExpedienteType::class, $expediente,array('disabled' => $disabled));
+    public function getForm(Expediente $expediente, $disabled = false, $seccion="GENERAL"){
+
+        if($disabled == false){
+            $clientes = $this->em->getRepository("AppBundle:Entidad")
+                        ->getEntidadesByCodigoTipoEntidad($this->estudio,"CLIENTE")
+                        ->getQuery()->getResult();
+        }else{
+            $clientes[] = $expediente->getClientePrincipal();
+        }
+        switch(strtoupper($seccion)){
+            case "NEW":
+                $formtype = ExpedienteType::class;
+            break;
+            case "GENERAL";default:
+                $formtype = ExpedienteGeneralType::class;
+            break;
+        }
+        
+        return $this->formFactory->create($formtype, $expediente,
+                array('disabled' => $disabled, 'clientes'=>$clientes));        
+        
     }
     
-    public function doNew($expediente){
-        $expediente->setEstudio($this->estudio);
-        $this->em->persist($expediente);
-        $this->em->flush();        
-        return $expediente;
+    public function doNew(Expediente $expediente){
+        try{
+            $expediente->setEstudio($this->estudio);
+            $expediente->setNaturaleza($this->em->getRepository("AppBundle:Expediente")->getExpedienteNaturalezaEntity("JUDICIAL"));
+            $this->doCheckPermissions($expediente,expedienteManager::DO_NEW);
+            
+            $this->em->persist($expediente);
+            $this->em->flush();        
+            return $expediente;
+        }catch(PermissionsCheckException $exp ){
+            throw $exp;
+        }catch(Exception $ex){
+            throw new NewException($ex->getMessage(),404,$ex);
+        }
     }
     
     public function doEdit($expediente){
@@ -77,6 +108,7 @@ class ExpedienteManager {
         return $expediente;
     }
     public function doDelete($expediente){
+        $this->doCheckPermissions($expediente,Manager::DO_DELETE);
         $expediente->setStatus(Expediente::STATUS_DELETED);
         $this->em->flush();
         return $this;
@@ -86,17 +118,22 @@ class ExpedienteManager {
         $this->em->flush();
         return $this;
     }
-    public function doCheckPermissions($expediente){
-        if(!$this->isVisible($expediente)){
-            throw new \Exception("No tiene permisos para este expediente");
-        }
+    public function doCheckPermissions($expediente, $ope = Manager::DO_NEW){
+        
+        $this->Validate($expediente,$ope);
+        
         $this->setUltimoIngreso($expediente);
         return $this;
     }
-    private function isVisible($expediente){
-        return( $expediente->getStatus() == Expediente::STATUS_NO_DELETED);
+
+    private function Validate(Expediente $expediente, $ope = Manager::DO_NEW){
+        if($this->estudio->getId() != $expediente->getEstudio()->getId() ){
+            throw new EstudioInvalidoException("El estudio es invalido: {" . $this->estudio->getId() . '} != {' . $expediente->getEstudio()->getId() . '}');
+        }
+        if($expediente->getStatus() == Expediente::STATUS_DELETED){
+            throw new NoExisteEntidadException("No existe la entidad");
+        }        
     }
-    
     
     /**
      * Guarda el estado del ultimo ingreso del expediente
@@ -113,7 +150,7 @@ class ExpedienteManager {
                    "Expediente"=>$expediente) 
         );
         if($usuarioExpediente){
-           $usuarioExpediente->setFechaultimoingreso(new \DateTime());
+           $usuarioExpediente->setFechaultimoingreso(new DateTime());
            $this->em->persist($usuarioExpediente);
            $this->em->flush();
         }

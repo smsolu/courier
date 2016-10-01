@@ -1,0 +1,9 @@
+{% extends 'CommonBundle:Find:find.html.twig' %}
+{% block aside_breadcrumb %}
+{% endblock %}
+{% block aside_left %}
+    {% render (controller("CommonBundle:Submenu:entidad", {'section': 'find','tipoEntidad': tipoEntidad}))%}
+{% endblock %}
+{% block body_top %}
+    {% render (controller("CommonBundle:Submenu:NAVEntidadFind", {"tipoEntidad":tipoEntidad}))%}
+{% endblock %}

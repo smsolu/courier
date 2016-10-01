@@ -5,7 +5,8 @@
 {% endblock %}
 
 {% block aside_left %}
-    {{ include('AppBundle:Expediente:submenu/sm_general.html.twig') }}
+    {{ include('AppBundle:Expediente:submenu/sm_general.html.twig') }} <br>
+    {{ include('AppBundle:Expediente:submenu/interviniente/sm_new.html.twig') }}
 {% endblock %}
 {% block body_top %}
     {{ include('AppBundle:Expediente:cabecera.html.twig') }}
@@ -13,9 +14,8 @@
 {% endblock %}
 {% block form_widgets %} 
      {{parent()}}
-     
     <div class="form-group" >  
-        <a><span class="glyphicon glyphicon-plus"></span> Nuevo Interviniente(HACER: despliega el formulario de nuevo, dentro de este)</a>
+        <a><span class="glyphicon glyphiescon-plus"></span> Nuevo Interviniente(HACER: despliega el formulario de nuevo, dentro de este)</a>
     </div>
      
 {%endblock%}

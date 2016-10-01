@@ -21,6 +21,7 @@ class ExpedienteIntervinienteType extends AbstractType
             //Caracter
             ->add('Caracter', EntityType::class, array(
                     'class' => 'AppBundle:CaracterInterviniente',
+                    'choices' => $options['caracterInterviniente'],
                     'choice_label' => 'nombre',
                     'mapped' => true, 
                     'label'=> 'Caracter'
@@ -38,7 +39,8 @@ class ExpedienteIntervinienteType extends AbstractType
     {
         $resolver->setDefaults(array(
             'data_class' => 'AppBundle\Entity\ExpedienteInterviniente',
-            'intervinientes' => null
+            'intervinientes' => null,
+            'caracterInterviniente' => null,
         ))
 //                ->setRequired(array('intervinientes'))
                 ;

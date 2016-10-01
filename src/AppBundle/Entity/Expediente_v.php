@@ -96,12 +96,7 @@ class Expediente_v extends LP_Entity
     
 
     
-    /**
-     * Set numero
-     *
-     * @param integer $numero
-     * @return Expediente
-     */
+
     public function setNumero($numero)
     {
         $this->numero= $numero;
@@ -109,11 +104,6 @@ class Expediente_v extends LP_Entity
         return $this;
     }
 
-    /**
-     * Get numero
-     *
-     * @return integer 
-     */
     public function getNumero()
     {
         return $this->numero;
@@ -123,13 +113,7 @@ class Expediente_v extends LP_Entity
     
     
     
-    
-   /**
-     * Set anio
-     *
-     * @param integer $anio
-     * @return Expediente
-     */
+
     public function setAnio($anio)
     {
         $this->anio = $anio;
@@ -137,22 +121,11 @@ class Expediente_v extends LP_Entity
         return $this;
     }
 
-    /**
-     * Get anio
-     *
-     * @return integer 
-     */
     public function getAnio()
     {
         return $this->anio;
     }    
 
-/**
-     * Set Codigo
-     *
-     * @param string $codigo
-     * @return this
-     */
     public function setCodigo($codigo)
     {
         $this->codigo = $codigo;
@@ -160,22 +133,11 @@ class Expediente_v extends LP_Entity
         return $this;
     }
 
-    /**
-     * Get Codigo
-     *
-     * @return string 
-     */
     public function getCodigo()
     {
         return $this->codigo;
     }    
     
-    /**
-     * Set caratula
-     *
-     * @param string $caratula
-     * @return Expediente
-     */
     public function setCaratula($caratula)
     {
         $this->caratula = $caratula;
@@ -183,21 +145,11 @@ class Expediente_v extends LP_Entity
         return $this;
     }
 
-    /**
-     * Get caratula
-     *
-     * @return string 
-     */
     public function getCaratula()
     {
         return $this->getNumeroCompleto() . " " . $this->caratula;
     }
-    /**
-     * Set identificador
-     *
-     * @param string $identificador
-     * @return Expediente
-     */
+
     public function setIdentificador($identificador)
     {
         $this->identificador = $identificador;
@@ -205,23 +157,12 @@ class Expediente_v extends LP_Entity
         return $this;
     }
 
-    /**
-     * Get identificador
-     *
-     * @return string 
-     */
     public function getIdentificador()
     {
         return "{" . $this->getId() ."}"; // Para pruebas!
         // return $this->identificador;
     }
     
-    /**
-     * Set idEstudio
-     *
-     * @param \LegalPro\Bundles\CommonBundle\Entity\Estudio $idEstudio
-     * @return Expediente
-     */
     public function setIdEstudio(\LegalPro\Bundles\CommonBundle\Entity\Estudio $idEstudio = null)
     {
         $this->idEstudio = $idEstudio;
@@ -229,23 +170,12 @@ class Expediente_v extends LP_Entity
         return $this;
     }
 
-    /**
-     * Get idEstudio
-     *
-     * @return \LegalPro\Bundles\CommonBundle\Entity\Estudio
-     */
     public function getIdEstudio()
     {
         return $this->idEstudio;
     }
 
     
-/**
-     * Set setIdExpedienteCamara
-     *
-     * @param \LegalPro\Bundles\CommonBundle\Entity\ExpedienteCamara $camara
-     * @return Expediente
-     */
     public function setExpedienteCamara(\LegalPro\Bundles\CommonBundle\Entity\ExpedienteCamara $camara = null)
     {
         $this->expedienteCamara = $camara;
@@ -253,11 +183,6 @@ class Expediente_v extends LP_Entity
         return $this;
     }
 
-    /**
-     * Get getIdExpedienteCamara
-     *
-     * @return \LegalPro\Bundles\CommonBundle\Entity\ExpedienteCamara
-     */
     public function getExpedienteCamara()
     {
         return $this->expedienteCamara;
@@ -265,13 +190,6 @@ class Expediente_v extends LP_Entity
     
     
     
-    
-    /**
-     * Set status
-     *
-     * @param boolean $status
-     * @return Expediente
-     */
     public function setStatus($status)
     {
         $this->status = $status;
@@ -279,23 +197,11 @@ class Expediente_v extends LP_Entity
         return $this;
     }
 
-    /**
-     * Get status
-     *
-     * @return boolean 
-     */
     public function getStatus()
     {
         return $this->status;
     }
     
-    
-    /**
-     * Set incidente
-     *
-     * @param boolean $status
-     * @return Expediente
-     */
     public function setNroincidente($nroincidente)
     {
         $this->nroincidente = $nroincidente;
@@ -303,11 +209,6 @@ class Expediente_v extends LP_Entity
         return $this;
     }
 
-    /**
-     * Get incidente
-     *
-     * @return integer 
-     */
     public function getNroincidente()
     {
         return $this->nroincidente;
@@ -315,11 +216,6 @@ class Expediente_v extends LP_Entity
     
     
     
-/**
-     * Get id
-     *
-     * @return integer 
-     */
     public function getId()
     {
         return $this->id;

@@ -20,8 +20,6 @@ use AppBundle\Entity\LP_Entity;
  */
 class Entidad extends LP_Entity
 {
-    const STATUS_NO_DELETED = 0;
-    const STATUS_DELETED = -1;
     /**
      * @var integer
      *

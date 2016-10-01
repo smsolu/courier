@@ -4,21 +4,11 @@
     {{ knp_menu_render('AppBundle:BreadcrumbBuilder:expedienteMenu', {'allow_safe_labels': true} ) }}
 {% endblock %}
 {% block aside_left %}
-{#    {% render (controller("CommonBundle:Submenu:expediente", {'expediente': null, 'seccion': 'new'}))%}#}
+    {{ include('AppBundle:Expediente:submenu/sm_expediente_new.html.twig') }}
 {% endblock %}
 {% block body_top %}
 {#    {% render (controller("CommonBundle:Submenu:NAVExpediente", {'expediente': null, 'seccion': 'new'}))%}#}
 {% endblock %}
 
-{#{% block body %}
-    {{ form_start(form) }}
-    {{ form_widget(form) }}
-    <div class="form-group col-xs-12 col-sm-12 text-right">
-        <a href="{{ path('expediente_list') }}">{%trans%}boton_cancel{%endtrans%}</a>
-        <input class="btn btn-primary" name = "modificar" type="submit" value="{%trans%}boton_modifysave{%endtrans%}" />
-        <input class="btn btn-primary" name= "guardar" type="submit" value="{%trans%}boton_save{%endtrans%}" />
-    </div>
-    {{ form_end(form) }}
-{% endblock %}#}
 
 

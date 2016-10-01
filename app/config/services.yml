@@ -28,11 +28,29 @@ services:
         class: AppBundle\Services\FilesystemManager\FilesystemManager
         arguments:    [%lp_filesystemmanager_adapter%, "@security.token_storage" ]
     lp_TemplateManager:
-        class: AppBundle\Services\DocumentManager\TemplateManager
-        arguments:    [ "@doctrine.orm.entity_manager", "@lp_FilesystemManager", "@security.token_storage" ]
+        class: AppBundle\Services\TemplateManager\TemplateManager
+        arguments:    [ "@doctrine.orm.entity_manager", "@lp_FilesystemManager", "@security.token_storage", "@form.factory" ]
     lp_DocumentManager:
         class: AppBundle\Services\DocumentManager\DocumentManager
         arguments:    [ "@doctrine.orm.entity_manager", "@lp_FilesystemManager", "@security.token_storage" ]
     lp_TipoCuentaContableManager:
         class: AppBundle\Services\ContabilidadManager\TipoCuentaContableManager
         arguments:    [ "@doctrine.orm.entity_manager", "@security.token_storage", "@form.factory" ]        
+    lp_EntidadManager:
+        class: AppBundle\Services\EntidadManager\EntidadManager
+        arguments:    [ "@doctrine.orm.entity_manager", "@security.token_storage", "@form.factory" ]              
+    lp_ExpedienteActuacionManager:
+        class: AppBundle\Services\ExpedienteManager\ExpedienteActuacionManager
+        arguments:    [ "@doctrine.orm.entity_manager", "@security.token_storage", "@form.factory" ]              
+    lp_ExpedienteVinculadoManager:
+        class: AppBundle\Services\ExpedienteManager\ExpedienteVinculadoManager
+        arguments:    [ "@doctrine.orm.entity_manager", "@security.token_storage", "@form.factory" ]              
+    lp_ExpedienteIntervinienteManager:
+        class: AppBundle\Services\ExpedienteManager\ExpedienteIntervinienteManager
+        arguments:    [ "@doctrine.orm.entity_manager", "@security.token_storage", "@form.factory" ]              
+    lp_ExpedienteEntidadManager:
+        class: AppBundle\Services\ExpedienteManager\ExpedienteEntidadManager
+        arguments:    [ "@doctrine.orm.entity_manager", "@security.token_storage", "@form.factory" ]              
+    lp_ExpedienteTipoProcesoManager:
+        class: AppBundle\Services\ExpedienteManager\ExpedienteTipoProcesoManager
+        arguments:    [ "@doctrine.orm.entity_manager", "@security.token_storage", "@form.factory" ]              

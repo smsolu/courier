@@ -156,11 +156,11 @@ class AbmManager {
         switch($operation){
             case AbmManager::abm_ope_new; DEFAULT:
                 $button = $this->getButton("modificar");
-                $button->setVisible(true);$button->setMenuVisible(true);
+                $button->setVisible(true);$button->setMenuVisible(false);
                 $button = $this->getButton("cancel");
                 $button->setVisible(true);$button->setMenuVisible(true);                
                 $button = $this->getButton("save");
-                $button->setVisible(true);$button->setMenuVisible(true); 
+                $button->setVisible(true);$button->setMenuVisible(false); 
             break;
             case AbmManager::abm_ope_show:
                 $button = $this->getButton("modificar");

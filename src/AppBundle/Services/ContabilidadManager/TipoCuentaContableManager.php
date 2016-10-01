@@ -2,15 +2,17 @@
 namespace AppBundle\Services\ContabilidadManager;
 
 use AppBundle\Entity\LP_Entity;
-use AppBundle\Entity\TipoCuentaContable;
-use AppBundle\Exception\RegEspException;
+use AppBundle\Exception\CheckPermissionException;
+use AppBundle\Exception\EsEspecialException;
+use AppBundle\Exception\EstudioInvalidoException;
+use AppBundle\Exception\NoExisteTipoCuentaContable;
 use AppBundle\Form\Type\Contabilidad\TipoCuentaContableType;
+use AppBundle\Services\Manager;
 use ListViewBundle\Services\LinkColumn;
 use ListViewBundle\Services\ListView;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorage;
-use Symfony\Component\Validator\Exception\ValidatorException;
 
-class TipoCuentaContableManager {
+class TipoCuentaContableManager extends Manager{
     
     private $estudio;
     private $user;
@@ -95,20 +97,20 @@ class TipoCuentaContableManager {
     }
     public function doCheckPermissions($tipoCuentaContable){
         if(!$this->isVisible($tipoCuentaContable)){
-            throw new ValidatorException("No tiene permisos para visualizar esta Tipo de Cuenta");
+            throw new CheckPermissionException("No tiene permisos para visualizar esta Tipo de Cuenta");
         }
         return $this;
     }
     
     public function doValidate($tipoCuentaContable){
         if(!$tipoCuentaContable){
-            throw new ValidatorException('No existe el tipo de cuenta contable');
+            throw new NoExisteTipoCuentaContable('No existe el tipo de cuenta contable');
         }
         if($tipoCuentaContable->getEstudio() != $this->estudio && $tipoCuentaContable->getEsp() == 0 ){
-            throw new ValidatorException('El tipo de cuenta contable no esta asociada al estudio');
+            throw new EstudioInvalidoException('El tipo de cuenta contable no esta asociada al estudio');
         }
         if($tipoCuentaContable->getEsp() == 1 ){
-            throw new RegEspException('El tipo de Cuenta Contable es especial y no puede ser editada o eliminada');
+            throw new EsEspecialException('El tipo de Cuenta Contable es especial y no puede ser editada o eliminada');
         }
     }
             

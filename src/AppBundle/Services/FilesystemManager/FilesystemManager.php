@@ -3,6 +3,7 @@ namespace AppBundle\Services\FilesystemManager;
 use Gaufrette\Filesystem;
 use Gaufrette\Adapter\Local as LocalAdapter;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorage;
+use AppBundle\Exception\FilesystemManagerDeleteExcepton;
 
 class FilesystemManager {
     private $config;
@@ -50,8 +51,12 @@ class FilesystemManager {
         return $key;
     }
     public function delete($key,$folder = ''){
-        $filesystem = $this->filesystem($folder);
-        $filesystem->delete($key);
+        try{
+            $filesystem = $this->filesystem($folder);
+            $filesystem->delete($key);
+        }catch(\Exception $e){
+            throw new FilesystemManagerDeleteExcepton("",0,$e);
+        }
         return $this;
     }
     //HACER: crear todas las funciones del filesystem

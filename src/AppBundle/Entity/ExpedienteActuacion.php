@@ -22,16 +22,6 @@ class ExpedienteActuacion extends LP_Entity
     private $id;
 
     /**
-     * @var \ExpedienteDocumento
-     *
-     * @ORM\ManyToOne(targetEntity="ExpedienteDocumento")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="id_documento", referencedColumnName="id")
-     * })
-     */
-    private $Documento;
-
-    /**
      * @var \DateTime
      *
      * @ORM\Column(name="fechayhora", type="datetime", nullable=false)
@@ -90,28 +80,6 @@ class ExpedienteActuacion extends LP_Entity
      */
     private $Expediente;
 
-    
-    /**
-     * @var \Entidad
-     *
-     * @ORM\ManyToOne(targetEntity="Entidad")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="id_responsable", referencedColumnName="id")
-     * })
-     */
-    private $AbogadoResponsable;
-
-    /**
-     * @var \Entidad
-     *
-     * @ORM\ManyToOne(targetEntity="Entidad")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="id_interviniente", referencedColumnName="id")
-     * })
-     */
-    private $Interviniente;
-    
-
     /**
      * Get id
      *
@@ -122,30 +90,7 @@ class ExpedienteActuacion extends LP_Entity
         return $this->id;
     }
 
-    /**
-     * Set idDocumento
-     *
-     * @param \AppBundle\Entity\ExpedienteDocumento $Documento
-     * @return \AppBundle\Entity\ExpedienteDocumento
-     */
-    public function setDocumento(\AppBundle\Entity\ExpedienteDocumento $Documento)
-    {
-        $this->Documento = $Documento;
-
-        return $this;
-    }
-
-    /**
-     * Get Documento
-     *
-     * @return \AppBundle\Entity\ExpedienteDocumento 
-     */
-    public function getDocumento()
-    {
-        return $this->Documento;
-    }
-
-    /**
+     /**
      * Set fechayhora
      *
      * @param \DateTime $fechayhora
@@ -238,29 +183,7 @@ class ExpedienteActuacion extends LP_Entity
         return $this->status;
     }
 
-    /**
-     * Set idUsuario
-     *
-     * @param \AppBundle\Entity\Usuario $Usuario
-     * @return DocumentoVersion
-     */
-    public function setUsuario(\AppBundle\Entity\Usuario $Usuario = null)
-    {
-        $this->Usuario = $Usuario;
-
-        return $this;
-    }
-
-    /**
-     * Get idUsuario
-     *
-     * @return \AppBundle\Entity\Usuario 
-     */
-    public function getUsuario()
-    {
-        return $this->Usuario;
-    }
-
+    
     /**
      * Set idEstudio
      *
@@ -330,77 +253,13 @@ class ExpedienteActuacion extends LP_Entity
         return $this->Expediente;
     }
 
-    
-
-     /**
-     * Set Interviniente
-     *
-     * @param \AppBundle\Entity\Entidad $value
-     * @return this
-     */
-    public function setInterviniente(\AppBundle\Entity\Entidad $value = null)
-    {
-        $this->Interviniente = $value;
-
-        return $this;
-    }
-
     /**
-     * Get Interviniente
+     * Get id Expediente
      *
-     * @return \AppBundle\Entity\Entidad 
-     */
-    public function getInterviniente()
-    {
-        return $this->Interviniente;
-    }
-    
- /**
-     * Set AbogadoResponsable
-     *
-     * @param \AppBundle\Entity\Entidad $value
-     * @return this
-     */
-    public function setAbogadoResponsable(\AppBundle\Entity\Entidad $value = null)
-    {
-        $this->AbogadoResponsable = $value;
-
-        return $this;
-    }
-
-    /**
-     * Get AbogadoResponsable
-     *
-     * @return \AppBundle\Entity\Entidad 
-     */
-    public function getAbogadoResponsable()
-    {
-        return $this->AbogadoResponsable;
-    }    
-    
-    
-    
-     /**
-     * Get idExpediente
-     *
-     * @return \AppBundle\Entity\Expediente 
-     */
-    public function getTipoActuacionNombre()
-    {
-        if($this->Tipoactuacion != null){
-            return $this->Tipoactuacion->getNombre();
-        }else{
-            return "";
-        }
-        
-    }
-    /**
-     * Get ExpedienteId
-     *
-     * @return \Integer 
+     * @return id
      */
     public function getExpedienteId()
     {
-        return $this->Expediente->getId();
+        return $this->getExpediente()->getId();
     }
 }

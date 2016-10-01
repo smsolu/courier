@@ -1,0 +1,12 @@
+{% extends 'ABMBundle::new.html.twig' %}
+
+{% block aside_breadcrumb %}
+{#    {% set breadcrumb = knp_menu_get('CommonBundle:BreadcrumbBuilder:entidadListMenu', [],{'tipoEntidad' : tipoEntidad} ) %}#}
+{#    {{ knp_menu_render(breadcrumb, {'allow_safe_labels': true, 'parametro' : 'bla'} ) }}#}
+{% endblock %}
+{% block aside_left %}
+    {{ include('AppBundle:Entidad:submenu/sm_entidad_new.html.twig', {'buttons': abmManager.Buttons()}) }}
+{% endblock %}
+{% block body_top %}
+    {#{% render (controller("CommonBundle:Submenu:NaventidadNew", {'tipoEntidad': tipoEntidad}))%}#}
+{% endblock %}

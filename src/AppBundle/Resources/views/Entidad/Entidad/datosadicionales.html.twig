@@ -1,0 +1,29 @@
+{% extends '::base.html.twig' %}
+{% block aside_breadcrumb %}
+    {% set breadcrumb = knp_menu_get('AppBundle:BreadcrumbBuilder:entidadShowMenu', [],{'tipoEntidad' : entidad.tipoEntidad, 'entidad' : entidad } ) %}
+    {{ knp_menu_render(breadcrumb, {'allow_safe_labels': true, 'parametro' : 'bla'} ) }}
+{% endblock %}
+{% block aside_left %}
+    {{ include('AppBundle:Entidad:submenu/sm_entidad_list.html.twig') }}
+{% endblock %}
+{% block body_top  %}
+    {{ include('AppBundle:Entidad:subnav/subnav.html.twig') }}
+{% endblock %} 
+{% block body %}
+    <h3>Agregar un Dato Adicional</h3>
+    <form name = "entidad" method="post">
+        <div class="form-group">
+            <label class ="control-label" for="datosadicionales_lblnombre">Nombre</label>
+            <input type="text" id="nombre"  name="nombre" maxlength="100" class="form-control" value="">
+            <label class ="control-label" for="datosadicionales_lblvalor">Valor</label>
+            <input type="text" id="valor" name="valor" maxlength="100" class="form-control" value="">            
+            <div class="form-group text-right" style="margin-top:10px">
+                 <input class="btn btn-primary" type="submit" value="{%trans%}boton_new{%endtrans%}" />
+            </div>
+        </div>
+    </form>
+    <hr>
+    {% render (controller("ListViewBundle:ListView:ListView", {'request': request, 'listview': list, 'parameters':parameters}))%}
+
+{% endblock %}
+

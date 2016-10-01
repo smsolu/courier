@@ -1,0 +1,30 @@
+{#
+    REQUIERE:
+        -entidad
+        -codigoTipoEntidad
+#}
+
+{% extends '::subnav/subnav.html.twig' %}
+
+{%
+    set buttons = 
+        {
+            1:{'name':'General','label':'<span class="glyphicon glyphicon-th-large"></span> General','path':path('entidad_show',{'id':entidad.id, 'section': 'General'})},
+            2:{'name':'Contacto','label':'<span class="glyphicon glyphicon-th-large"></span> Contacto','path':path('entidad_show',{'id':entidad.id, 'section': 'Contacto'})},
+            3:{'name':'Direccion','label':'<span class="glyphicon glyphicon-th-large"></span> Dirección','path':path('entidad_show',{'id':entidad.id, 'section': 'Direccion'})},
+            4:{'name':'Laboral','label':'<span class="glyphicon glyphicon-th-large"></span> Laboral','path':path('entidad_show',{'id':entidad.id, 'section': 'Laboral'})},
+            5:{'name':'Observaciones','label':'<span class="glyphicon glyphicon-th-large"></span> Observaciones','path':path('entidad_show',{'id':entidad.id, 'section': 'Observaciones'})},
+            6:{'name':'DatosAdicionales','label':'<span class="glyphicon glyphicon-th-large"></span> Datos Adicionales','path':path('entidad_show',{'id':entidad.id, 'section': 'DatosAdicionales'})},    
+        }
+%}
+
+{%if codigoTipoEntidad != 'ABOGADO'%}
+    {%
+        set buttons2 = 
+        {
+            7:{'name':'CuentaCorriente','label':'<span class="glyphicon glyphicon-th-large"></span> Cuenta Corriente - (FALTA)','path':path('entidad_show',{'id':entidad.id, 'section': 'CuentaCorriente'})},
+            8:{'name':'CasosRelacionados','label':'<span class="glyphicon glyphicon-th-large"></span> Casos Relacionados - (FALTA)','path':path('entidad_show',{'id':entidad.id, 'section': 'CasosRelacionados'})}
+        }
+    %}
+    {%set buttons = buttons|merge(buttons2)%}
+{%endif%}

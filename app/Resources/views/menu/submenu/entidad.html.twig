@@ -1,0 +1,18 @@
+    {#ENTIDADES#}
+
+    <li class="dropdown">
+        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+            <span class="glyphicon glyphicon-list"></span> {%trans %}menu_entidad{% endtrans %}<b class="caret"></b>
+        </a>
+
+        <ul class="dropdown-menu">
+            
+            <li><a href="{{path("entidad_list",{'codigoTipoEntidad':'cliente'})}}">{%trans%}menu_entidad_cliente{%endtrans%}</a></li>
+            <li><a href="{{path("entidad_list",{'codigoTipoEntidad':'oponente'})}}">{%trans%}menu_entidad_oponente{%endtrans%}</a></li>
+            <li><a href="{{path("entidad_list",{'codigoTipoEntidad':'empleado'})}}">{%trans%}menu_entidad_empleado{%endtrans%}</a></li>
+            <li><a href="{{path("entidad_list",{'codigoTipoEntidad':'abogado'})}}">{%trans%}menu_entidad_abogado{%endtrans%}</a></li>
+            {#<li><a href="{{path("tipoentidad_list")}}">{%trans%}menu_entidad_otrascategorias{%endtrans%}</a></li>#}
+        </ul>
+      
+    </li>
+

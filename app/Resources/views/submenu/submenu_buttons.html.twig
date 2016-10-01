@@ -6,6 +6,12 @@
 #}
 {% extends '::submenu/submenu.html.twig' %}
 
+{%if buttons is not defined  %}
+    {%if abmManager is defined %}
+        {%set buttons = abmManager.buttons %}
+    {%endif%}
+{%endif%}
+
 {% block buttons %}
     {% for button in buttons %}
         {%if button.menuVisible %}

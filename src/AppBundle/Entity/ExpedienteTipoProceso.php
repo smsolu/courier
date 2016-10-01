@@ -1,8 +1,9 @@
 <?php
 
 namespace AppBundle\Entity;
-use Doctrine\ORM\Mapping as ORM;
+
 use AppBundle\Entity\LP_Entity;
+use Doctrine\ORM\Mapping as ORM;
 /**
  * ExpedienteIntervinientes
  *
@@ -79,10 +80,10 @@ class ExpedienteTipoProceso extends LP_Entity
     /**
      * Set Estudio
      *
-     * @param \AppBundle\Entity\Estudio $Estudio
+     * @param Estudio $Estudio
      * @return ExpedienteINterviniente
      */
-    public function setEstudio(\AppBundle\Entity\Estudio $Estudio = null)
+    public function setEstudio(Estudio $Estudio = null)
     {
         $this->Estudio = $Estudio;
 
@@ -92,7 +93,7 @@ class ExpedienteTipoProceso extends LP_Entity
     /**
      * Get Estudio
      *
-     * @return \AppBundle\Entity\Estudio 
+     * @return Estudio 
      */
     public function getEstudio()
     {
@@ -102,10 +103,10 @@ class ExpedienteTipoProceso extends LP_Entity
     /**
      * Set Expediente
      *
-     * @param \AppBundle\Entity\Expediente $Expediente
+     * @param Expediente $Expediente
      * @return this
      */
-    public function setExpediente(\AppBundle\Entity\Expediente $Expediente = null)
+    public function setExpediente(Expediente $Expediente = null)
     {
         $this->Expediente = $Expediente;
 
@@ -115,7 +116,7 @@ class ExpedienteTipoProceso extends LP_Entity
     /**
      * Get Expediente
      *
-     * @return \AppBundle\Entity\Expediente 
+     * @return Expediente 
      */
     public function getExpediente()
     {
@@ -125,10 +126,10 @@ class ExpedienteTipoProceso extends LP_Entity
     /**
      * Set TipoProceso
      *
-     * @param \AppBundle\Entity\TipoProceso $TipoProceso
+     * @param TipoProceso $TipoProceso
      * @return this
      */
-    public function setTipoProceso(\AppBundle\Entity\TipoProceso $TipoProceso = null)
+    public function setTipoProceso(TipoProceso $TipoProceso = null)
     {
         $this->TipoProceso = $TipoProceso;
 
@@ -138,7 +139,7 @@ class ExpedienteTipoProceso extends LP_Entity
     /**
      * Get TipoProceso
      *
-     * @return \AppBundle\Entity\TipoProceso 
+     * @return TipoProceso 
      */
     public function getTipoProceso()
     {
