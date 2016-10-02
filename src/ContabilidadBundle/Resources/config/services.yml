@@ -1,6 +1,0 @@
-services:
-    cc_ContabilidadCCManager:
-        class: ContabilidadBundle\Services\ContabilidadCCManager
-        arguments:    [ "@doctrine.orm.entity_manager", "@security.token_storage", "@form.factory" ]
-      
-   

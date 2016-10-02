@@ -9,6 +9,7 @@
             <link rel="stylesheet" href="{{ asset('https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap-theme.min.css') }}"/> <!-- importación del tema css (Esto es opcional) -->
             <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/2.4.0/fullcalendar.min.css"/>            
             <meta name="viewport" content="width=device-width, initial-scale=1"/>
+            {#{{ include ('base_css.html.twig') }}#}
         {% endblock %}
     </head>
     <body>        
@@ -45,11 +46,7 @@
                 {% block body_bottom %}{% endblock %}                
             </article>
         </div>
-        <aside class='col-md-3 col-xs-12'>
-            {% block aside_right %}
-{#                {{ include('::aside_right.html.twig')}}#}
-            {% endblock %}
-        </aside>
+
       
         {% block javascripts %}
             <script src="{{ asset('http://code.jquery.com/jquery.js') }}"></script>
@@ -62,8 +59,7 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/2.4.0/lang/es.js"></script> 
         
         {% endblock %}
-    
-{#          </div>          #}
+
 
     </body>
 </html>

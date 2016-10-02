@@ -77,8 +77,8 @@ class UserController extends Controller
         $query = $em->createQuery(
             'SELECT u
             FROM AppBundle:User u
-            WHERE u.estudio = :estudio'
-        )->setParameter('estudio', $user->getEstudio());
+            WHERE u.empresa = :empresa'
+        )->setParameter('empresa', $user->getEmpresa());
 
         $paginator  = $this->get('knp_paginator');
         $pagination = $paginator->paginate(

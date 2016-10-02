@@ -22,10 +22,10 @@ class User extends BaseUser
      /**
      * @var Estudio
       * 
-     * @ORM\ManyToOne(targetEntity="Estudio", inversedBy="usuarios", cascade={"persist"})
-     * @ORM\JoinColumn(name="estudio_id", referencedColumnName="id")
+     * @ORM\ManyToOne(targetEntity="Empresa", inversedBy="usuarios", cascade={"persist"})
+     * @ORM\JoinColumn(name="id_empresa", referencedColumnName="id")
      */
-    protected $estudio;
+    protected $empresa;
 
     /**
      * @var Group
@@ -48,15 +48,15 @@ class User extends BaseUser
         return $this->id;
     }
 
-    public function setEstudio( Estudio $estudio = null)
+    public function setEmpresa( Empresa $empresa = null)
     {
-        $this->estudio = $estudio;
+        $this->empresa = $empresa;
         return $this;
     }
 
-    public function getEstudio()
+    public function getEmpresa()
     {
-        return $this->estudio;
+        return $this->empresa;
     }
     public function getRoles($allRoles= true){
         if($allRoles){

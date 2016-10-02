@@ -1,9 +1,0 @@
-{% extends 'ABMBundle::new.html.twig' %}
-{% block aside_breadcrumb %}
-    {{ knp_menu_render('AppBundle:BreadcrumbBuilder:tipoCuentasContablesMenu', {'allow_safe_labels': true} ) }}    
-{% endblock %}
-
-{% block aside_left %}
-    {{ include('AppBundle:Contabilidad:submenu/sm_tipocuentacontable_new.html.twig') }}
-{% endblock %}
-

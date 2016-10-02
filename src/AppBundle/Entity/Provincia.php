@@ -5,12 +5,12 @@ namespace AppBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use AppBundle\Entity\CourierEntity;
 /**
- * EntidadTipoResponsabilidadIva
+ * Provincia
  *
- * @ORM\Table(name="entidad_tiporesponsabilidadiva")
+ * @ORM\Table(name="provincia", indexes={@ORM\Index(name="entidad_provincia_codigo", columns={"codigo"})})
  * @ORM\Entity
  */
-class EntidadTipoResponsabilidadIva extends CourierEntity
+class Provincia extends CourierEntity
 {
     /**
      * @var integer
@@ -42,32 +42,14 @@ class EntidadTipoResponsabilidadIva extends CourierEntity
      */
     private $status = '0';
 
-    /**
-     * @var integer
-     *
-     * @ORM\Column(name="esp", type="integer", nullable=true)
-     */
-    private $esp = '0';
-
-   
 
 
-    /**
-     * Get id
-     *
-     * @return integer 
-     */
+ 
     public function getId()
     {
         return $this->id;
     }
 
-    /**
-     * Set codigo
-     *
-     * @param string $codigo
-     * @return EntidadEmpresa
-     */
     public function setCodigo($codigo)
     {
         $this->codigo = $codigo;
@@ -75,22 +57,13 @@ class EntidadTipoResponsabilidadIva extends CourierEntity
         return $this;
     }
 
-    /**
-     * Get codigo
-     *
-     * @return string 
-     */
+ 
     public function getCodigo()
     {
         return $this->codigo;
     }
 
-    /**
-     * Set nombre
-     *
-     * @param string $nombre
-     * @return EntidadEmpresa
-     */
+ 
     public function setNombre($nombre)
     {
         $this->nombre = $nombre;
@@ -98,22 +71,13 @@ class EntidadTipoResponsabilidadIva extends CourierEntity
         return $this;
     }
 
-    /**
-     * Get nombre
-     *
-     * @return string 
-     */
+  
     public function getNombre()
     {
         return $this->nombre;
     }
 
-    /**
-     * Set status
-     *
-     * @param integer $status
-     * @return EntidadEmpresa
-     */
+  
     public function setStatus($status)
     {
         $this->status = $status;
@@ -121,38 +85,9 @@ class EntidadTipoResponsabilidadIva extends CourierEntity
         return $this;
     }
 
-    /**
-     * Get status
-     *
-     * @return integer 
-     */
+    
     public function getStatus()
     {
         return $this->status;
     }
-
-    /**
-     * Set esp
-     *
-     * @param integer $esp
-     * @return EntidadEmpresa
-     */
-    public function setEsp($esp)
-    {
-        $this->esp = $esp;
-
-        return $this;
-    }
-
-    /**
-     * Get esp
-     *
-     * @return integer 
-     */
-    public function getEsp()
-    {
-        return $this->esp;
-    }
-
-    
 }

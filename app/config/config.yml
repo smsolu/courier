@@ -5,7 +5,6 @@ imports:
     - { resource: "@AppBundle/Resources/config/services.yml" }
     - { resource: "@ListViewBundle/Resources/config/services.yml" }
     - { resource: "@ABMBundle/Resources/config/services.yml" }
-    - { resource: "@ContabilidadBundle/Resources/config/services.yml" }
     
 # Put parameters here that don't need to change on each machine where the app is deployed
 # http://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
@@ -108,5 +107,5 @@ knp_menu:
 #            from_email:     # Use this node only if you don't want the global email address for the confirmation email
 #                address:        ...
 #                sender_name:    ...
-#            enabled:    true # change to true for required email confirmation
-#            template:   FOSUserBundle:Registration:email.txt.twig
+#            enabled:    true
+#            template:   UserBundle:Registration:email.txt.twig

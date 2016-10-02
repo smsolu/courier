@@ -4,38 +4,20 @@
     <div class="collapse navbar-collapse navbar-ex1-collapse">
         {% if app.user.username is defined %}        
             <ul class="nav navbar-nav">
+                {#ENVIOS#}
+                {% include 'menu/submenu/nuevo_envio.html.twig' %}
 
-                {#CASOS#}
-                {% include 'menu/submenu/caso.html.twig' %}
-
-                {#ENTIDADES#}
-                {% include 'menu/submenu/entidad.html.twig' %}
-
-                {#AGENDA#}
-                {% include 'menu/submenu/agenda.html.twig' %} 
-
-                {#CONTABILIDAD#}
-                {% include 'menu/submenu/contabilidad.html.twig' %}                 
-                
+                {#MISENVIOS#}
+                {% include 'menu/submenu/mis_envios.html.twig' %}
             </ul>  
 
             <ul class="nav navbar-nav navbar-right pull-right">
-
-                {# EXPEDIENTES FAVORITOS #}
-                {% include 'menu/submenu/favorito.html.twig' %}                 
-                
                 {# ALERTAS #}
                 {% include 'menu/submenu/alerta.html.twig' %} 
-                
                 {# BUSCAR #}
-                {% include 'menu/submenu/buscar.html.twig' %} 
-
-                {# ESTUDIO #}
-                {% include 'menu/submenu/estudio.html.twig' %}  
-                
+{#                {% include 'menu/submenu/buscar.html.twig' %} #}
                 {# USUARIO #}
                 {% include 'menu/submenu/usuario.html.twig' %}
-
             </ul>
         {%else%}
             <ul class="nav navbar-nav">
@@ -43,9 +25,4 @@
             </ul>
         {%endif%}
     </div>
-    
-        
-    {#    {% include 'nav/sections/alerts_nav.html.twig' %}#}
-    {#    {% include 'nav/sections/favorites_nav.html.twig' %} #}
-    {#    {% include 'nav/sections/find_nav.html.twig' %}#}
 </header>          

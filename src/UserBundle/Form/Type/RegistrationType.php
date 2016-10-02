@@ -4,6 +4,7 @@ namespace UserBundle\Form\Type;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use AppBundle\Form\Type\Estudio\EstudioType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 
 class RegistrationType extends AbstractType
 {
@@ -11,6 +12,8 @@ class RegistrationType extends AbstractType
     {
         $builder
             ->add('estudio', EstudioType::class);
+        $builder
+            ->add('nombre', TextType::class);        
     }
     public function getParent()
     {

@@ -1,7 +1,3 @@
-contabilidad:
-    resource: "@ContabilidadBundle/Controller"
-    type:     annotation
-    prefix:   /
 abm:
     resource: "@ABMBundle/Controller/"
     type:     annotation

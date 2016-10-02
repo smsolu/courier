@@ -18,12 +18,10 @@ class AppKernel extends Kernel
             new AppBundle\AppBundle(),
             new FOS\UserBundle\FOSUserBundle(),
             new UserBundle\UserBundle(),
-            new UserGroupBundle\UserGroupBundle(),
             new Knp\Bundle\PaginatorBundle\KnpPaginatorBundle(),
             new ListViewBundle\ListViewBundle(),
             new ABMBundle\ABMBundle(),
             new Knp\Bundle\MenuBundle\KnpMenuBundle(),
-            new ContabilidadBundle\ContabilidadBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'), true)) {

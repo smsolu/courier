@@ -1,9 +1,0 @@
-Tenes que ir a la carpeta BIN del mysql que tenes instalado, en mi maquina es:
-cd C:\Program Files\MySQL\MySQL Server 5.6\bin
-
-CREAR BACKUP:
-"C:\Program Files\MySQL\MySQL Server 5.6\bin\MYSQLDUMP" -uroot -p1357911 --routines legalpro>C:/xampp/htdocs/legalpro/db/legalpro.sql
-
-MYSQL
-MYSQL -uroot -p1357911 legalpro<C:/xampp/htdocs/legalpro/db/legalpro.sql
-MYSQL -uroot legalpro<D:/xampp/htdocs/legalpro/db/legalpro.sql

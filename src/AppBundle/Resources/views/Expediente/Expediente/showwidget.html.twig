@@ -1,8 +1,0 @@
-<table class='table table-striped'>    
-    {% for key, expediente in expedientes|slice(0,3) %}
-        <tr>
-            <td>{{key+1}} -  <b> {{expediente.NumeroyCaratula}}</b></td>
-        </tr>
-    {% endfor %}
-<td colspan='2'><span class="badge">{{nroExpedientes}}</span>   Expedientes Activos </td>
-</table>
